@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "567970227612",
+    "project_id": "educode-4d31d",
+    "storage_bucket": "educode-4d31d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567970227612:android:699f8ff09832b46fe75459",
+        "android_client_info": {
+          "package_name": "hn.edu.unah.educode"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw_SG34gR57XISL-P8bNCAgCgU4Rk1Ozk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
