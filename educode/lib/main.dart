@@ -1,3 +1,5 @@
+import 'package:educode/interfaces/pages/login_register/inicio.dart';
+import 'package:educode/interfaces/pages/login_register/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -15,11 +17,14 @@ class MyApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return MaterialApp(
-      home: Scaffold(
-        body: Center(child: Text("Creacion del proyecto"),),
-      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: 'inicio',
+      routes: {
+        'inicio': (context)=> const Inicio(),
+        'login': (context) => const LoginPage(),
+      } ,
     );
   }
 
