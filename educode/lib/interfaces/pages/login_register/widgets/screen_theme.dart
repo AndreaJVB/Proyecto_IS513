@@ -14,4 +14,16 @@ class ScreenProperty{
     _ancho = MediaQuery.of(context).size.width;
     return _ancho;
   }
+
+   LinearGradient fondoGradiente() {
+    return LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+          Colors.orange[400]!,
+          Colors.orange[200]!,
+          Colors.purple[200]!,
+          Colors.purple[400]!
+        ]);
+  }
 }

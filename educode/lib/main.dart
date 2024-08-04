@@ -1,7 +1,9 @@
 import 'package:educode/interfaces/pages/login_register/inicio.dart';
 import 'package:educode/interfaces/pages/login_register/login_page.dart';
+import 'package:educode/interfaces/pages/login_register/registro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,13 +20,14 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'inicio',
-      routes: {
-        'inicio': (context)=> const Inicio(),
-        'login': (context) => const LoginPage(),
-      } ,
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () =>const Inicio(),),
+        GetPage(name: '/login', page: ()=> LoginPage()),
+        GetPage(name: '/registro', page: ()=> const RegistroPage())
+      ],
     );
   }
 

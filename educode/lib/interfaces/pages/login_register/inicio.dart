@@ -1,6 +1,8 @@
+
 import 'package:educode/interfaces/pages/login_register/widgets/botonesLRI_custom.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Inicio extends StatelessWidget{
   const Inicio({super.key});
@@ -8,8 +10,7 @@ class Inicio extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     //VARIABLES
-    final altura = ScreenProperty(context: context).altura;
-    final ancho = ScreenProperty(context: context).ancho;
+   final screenP = ScreenProperty(context: context);
     const color2 = Color.fromARGB(255, 127, 78, 188);
     final textStyle = TextStyle(fontFamily: 'Times New Romans', fontSize: 25, color: color2, fontWeight: FontWeight.bold);
     final textStyle2 = TextStyle(fontFamily: 'Times New Romans', fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold);
@@ -19,18 +20,10 @@ class Inicio extends StatelessWidget{
     
     return Scaffold(
       body: Container(
-        width: ancho,
-        height: altura,
+        width: screenP.ancho,
+        height: screenP.altura,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-            Colors.orange[400]!,
-            Colors.orange[200]!,
-            Colors.purple[200]!,
-            Colors.purple[400]!
-          ]),
+          gradient: screenP.fondoGradiente(),
         ),
         child: Center(
           child: SingleChildScrollView(
@@ -57,15 +50,15 @@ class Inicio extends StatelessWidget{
                   ),
                  Column(
                    children: [
-                     Image.asset("lib/assets/coding.png", width: ancho*0.9,),
+                     Image.asset("lib/assets/coding.png", width: screenP.ancho*0.9,),
                      const SizedBox(height: 20,),
-                     OutlinedButtomInicio(ancho: ancho, texto: "Iniciar Sesion", color: Colors.white, size: Size(ancho*0.7, 50,),
-                     textStyle: textStyle4, funcion: (){},),
+                     OutlinedButtomInicio(ancho: screenP.ancho, texto: "Iniciar Sesion", color: Colors.white, size: Size(screenP.ancho*0.7, 50,),
+                     textStyle: textStyle4, funcion: ()=>Get.toNamed('/login'),),
                      const SizedBox(height: 10,),
                       const Text("O"),
                       const SizedBox(height: 10,),
-                      OutlinedButtomInicio(ancho: ancho, texto: "Registrarse", color: Colors.white, size: Size(ancho*0.7, 50,),
-                      textStyle: textStyle4, funcion: (){},
+                      OutlinedButtomInicio(ancho: screenP.ancho, texto: "Registrarse", color: Colors.white, size: Size(screenP.ancho*0.7, 50,),
+                      textStyle: textStyle4, funcion: ()=>Get.toNamed('/registro'),
                       ),
                    ],
                  ),
