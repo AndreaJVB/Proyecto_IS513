@@ -1,6 +1,7 @@
 import 'package:educode/interfaces/pages/login_register/inicio.dart';
 import 'package:educode/interfaces/pages/login_register/login_page.dart';
 import 'package:educode/interfaces/pages/login_register/registro_page.dart';
+import 'package:educode/interfaces/pages/settings/account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget{
       getPages: [
         GetPage(name: '/', page: () =>const Inicio(),),
         GetPage(name: '/login', page: ()=> LoginPage()),
-        GetPage(name: '/registro', page: ()=> const RegistroPage())
+        GetPage(name: '/registro', page: ()=> RegistroPage()),
+        GetPage(name: '/perfil', page: ()=> ProfilePage())
       ],
     );
   }

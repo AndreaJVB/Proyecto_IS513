@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomInputs extends StatelessWidget {
-  const CustomInputs({
+class TextFormCustom extends StatelessWidget {
+  const TextFormCustom({
     super.key,
     required this.label,
     required this.controller,
@@ -36,13 +36,14 @@ class CustomInputs extends StatelessWidget {
         labelStyle: const TextStyle(fontWeight: FontWeight.w600),
         hintStyle: const TextStyle(fontWeight: FontWeight.w600),
         counterStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-        fillColor: Colors.white,
+        fillColor: const Color.fromARGB(200, 255, 255, 255),
         filled: true,
         hintText: hintText ?? 'Ingrese su $label',
         label: Text(label),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
+        floatingLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
       ),
     );
   }
