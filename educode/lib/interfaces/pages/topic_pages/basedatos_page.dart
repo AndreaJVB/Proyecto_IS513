@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BasedatosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Basedatos'),
-      ),
-      body: Center(
-        child: Text('Página de Basedatos'),
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        if (details.primaryDelta! > 5) {
+          // Ajusta este valor para cambiar la sensibilidad
+          Get.back();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Base de Datos'),
+        ),
+        body: Center(
+          child: Text('Página de Base de Datos'),
+        ),
       ),
     );
   }
