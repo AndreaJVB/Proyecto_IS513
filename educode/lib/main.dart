@@ -1,4 +1,4 @@
-import 'package:educode/home_page.dart';
+import 'package:educode/mode_page.dart';
 import 'package:educode/interfaces/pages/game_mode/multijugador_page.dart';
 import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
 import 'package:educode/interfaces/pages/login_register/inicio.dart';
@@ -30,13 +30,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => const Inicio()),
-        GetPage(name: '/login', page: () => LoginPage()),
+        GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/registro', page: () => RegistroPage()),
-        GetPage(name: '/perfil', page: () => ProfilePage()),
-        GetPage(name: '/home', page: () => const HomePage()),
+        GetPage(name: '/home', page: () => const ModePage()),
         GetPage(name: '/solitario', page: () => SolitarioPage()),
         GetPage(name: '/multijugador', page: () => MultijugadorPage()),
         GetPage(name: '/basedatos', page: () => BasedatosPage()),

@@ -1,4 +1,5 @@
 import 'package:educode/controllers/auth.dart';
+import 'package:educode/controllers/validaciones.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/icono_cerrar.dart';
 import 'package:educode/interfaces/widgets/circle_avatar.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class RegistroPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //Variables
     final screenP = ScreenProperty(context: context);
+    final validar = Validacion();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -69,7 +71,12 @@ class RegistroPage extends StatelessWidget {
                             TextFormCustom(label: "Nombre", controller: nombreController),
                             TextFormCustom(label: "Apellido", controller: apellidoController),
                             TextFormCustom(label: "Nombre Usuario", controller: usuarioController),
-                            TextFormCustom(label: "Correo", controller: correoController, keyboardType: TextInputType.emailAddress),
+                            TextFormCustom(label: "Correo", 
+                            controller: correoController, keyboardType: TextInputType.emailAddress,
+                            validator: (valor){
+                              validar.validacionCorreo(correoController);
+                            },
+                            ),
                             TextFormCustom(label: "Contraseña", controller: passwordController, obscureText: true),
                             TextFormCustom(label: "Confirmar Contraseña", controller: confirmPassword, obscureText: true),
                           ],
@@ -79,6 +86,7 @@ class RegistroPage extends StatelessWidget {
                           ancho: screenP.ancho * 0.7,
                           texto: "Registrarse",
                           funcion: () {
+                            if (!formkey.currentState!.validate()) return;
                             createUsers.createUserWithEmailAndPassword(
                               email: correoController.text,
                                password: passwordController.text);
@@ -108,4 +116,3 @@ class RegistroPage extends StatelessWidget {
     );
   }
 }
-

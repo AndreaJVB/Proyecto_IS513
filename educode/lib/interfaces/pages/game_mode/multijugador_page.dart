@@ -1,3 +1,4 @@
+import 'package:educode/interfaces/pages/settings/account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +13,7 @@ class _MultijugadorPageState extends State<MultijugadorPage> {
   static final List<Widget> _widgetOptions = <Widget>[
     Text('Inicio Multijugador',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Settings Multijugador',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {

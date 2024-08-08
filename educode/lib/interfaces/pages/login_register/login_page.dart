@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
                         ancho: screenP.ancho,
                         size: Size(screenP.ancho * 0.8, 50),
                         texto: "Iniciar sesión",
-                        funcion: () {Get.toNamed('/perfil');},
+                        funcion: () {Get.toNamed('/home');},
                         color: const Color.fromARGB(61, 177, 139, 89),
                         elevation: 20,
                       ),
