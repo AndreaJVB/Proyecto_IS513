@@ -4,7 +4,6 @@ import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
 import 'package:educode/interfaces/pages/login_register/inicio.dart';
 import 'package:educode/interfaces/pages/login_register/login_page.dart';
 import 'package:educode/interfaces/pages/login_register/registro_page.dart';
-import 'package:educode/interfaces/pages/settings/account_page.dart';
 import 'package:educode/interfaces/pages/topic_pages/algoritmo_page.dart';
 import 'package:educode/interfaces/pages/topic_pages/basedatos_page.dart';
 import 'package:educode/interfaces/pages/topic_pages/lenguaje_programaicon_page.dart';

@@ -11,7 +11,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 class RegistroPage extends StatelessWidget {
   RegistroPage({super.key});
 
-  //Controllers
+  // Controllers
   final nombreController = TextEditingController();
   final apellidoController = TextEditingController();
   final usuarioController = TextEditingController();
@@ -25,7 +25,7 @@ class RegistroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Variables
+    // Variables
     final screenP = ScreenProperty(context: context);
     final validar = Validacion();
 
@@ -47,7 +47,7 @@ class RegistroPage extends StatelessWidget {
                 ),
                 child: const Align(
                   alignment: Alignment.center,
-                  child: CircleAvatarCustom(), //AVATAR
+                  child: CircleAvatarCustom(), // AVATAR
                 ),
               ),
               Align(
@@ -63,52 +63,80 @@ class RegistroPage extends StatelessWidget {
                     ),
                   ),
                   child: SingleChildScrollView(
-                    child: Column(     
-                      children: [
-                        Wrap(
-                          runSpacing: 12,
-                          children: [
-                            TextFormCustom(label: "Nombre", controller: nombreController),
-                            TextFormCustom(label: "Apellido", controller: apellidoController),
-                            TextFormCustom(label: "Nombre Usuario", controller: usuarioController),
-                            TextFormCustom(label: "Correo", 
-                            controller: correoController, keyboardType: TextInputType.emailAddress,
-                            validator: (valor){
-                              validar.validacionCorreo(correoController);
+                    child: Form(
+                      key: formkey,
+                      child: Column(
+                        children: [
+                          Wrap(
+                            runSpacing: 12,
+                            children: [
+                              TextFormCustom(
+                                label: "Nombre",
+                                controller: nombreController,
+                              ),
+                              TextFormCustom(
+                                label: "Apellido",
+                                controller: apellidoController,
+                              ),
+                              TextFormCustom(
+                                label: "Nombre Usuario",
+                                controller: usuarioController,
+                              ),
+                              TextFormCustom(
+                                label: "Correo",
+                                controller: correoController,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (valor) {
+                                  return validar.validacionCorreo(valor);
+                                },
+                              ),
+                              TextFormCustom(
+                                label: "Contraseña",
+                                controller: passwordController,
+                                obscureText: true,
+                                validator: (valor) {
+                                  return validar.validacionPassword(valor);
+                                },
+                              ),
+                              TextFormCustom(
+                                label: "Confirmar Contraseña",
+                                controller: confirmPassword,
+                                obscureText: true,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          OutlinedButtomInicio(
+                            ancho: screenP.ancho * 0.7,
+                            texto: "Registrarse",
+                            funcion: () {
+                              if (!formkey.currentState!.validate()) return;
+                              createUsers.createUserWithEmailAndPassword(
+                                email: correoController.text,
+                                password: passwordController.text,
+                              );
                             },
+                            color: Colors.white,
+                            textStyle: TextStyle(
+                              color: Color(0xFFFF5F6D),
+                              fontWeight: FontWeight.bold,
                             ),
-                            TextFormCustom(label: "Contraseña", controller: passwordController, obscureText: true),
-                            TextFormCustom(label: "Confirmar Contraseña", controller: confirmPassword, obscureText: true),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        OutlinedButtomInicio(
-                          ancho: screenP.ancho * 0.7,
-                          texto: "Registrarse",
-                          funcion: () {
-                            if (!formkey.currentState!.validate()) return;
-                            createUsers.createUserWithEmailAndPassword(
-                              email: correoController.text,
-                               password: passwordController.text);
-                        
-                          },
-                          color: Colors.white,
-                          textStyle: TextStyle(color: Color(0xFFFF5F6D), fontWeight: FontWeight.bold),
-                          size: Size(screenP.ancho * 0.7, 50),
-                          elevation: 5,
-                        ),
-                        SizedBox(height: 20),
-                         SignInButton(
-                        Buttons.GoogleDark,
-                        text: "Registrarse con Google",
-                        onPressed: () {},
+                            size: Size(screenP.ancho * 0.7, 50),
+                            elevation: 5,
+                          ),
+                          SizedBox(height: 20),
+                          SignInButton(
+                            Buttons.GoogleDark,
+                            text: "Registrarse con Google",
+                            onPressed: () {},
+                          ),
+                        ],
                       ),
-                      ],
                     ),
                   ),
                 ),
               ),
-              closeIcon()
+              const closeIcon(),
             ],
           ),
         ),
