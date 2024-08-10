@@ -19,8 +19,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+ // Inicializa GetStorage
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => const Inicio()),
-        GetPage(name: '/login', page: () => const LoginPage()),
+        GetPage(name: '/login', page: () => LoginPage()),
         GetPage(name: '/registro', page: () => RegistroPage()),
         GetPage(name: '/home', page: () => const ModePage()),
         GetPage(name: '/solitario', page: () => SolitarioPage()),

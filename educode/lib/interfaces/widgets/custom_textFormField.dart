@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextFormCustom extends StatelessWidget {
-  const TextFormCustom({
+  TextFormCustom({
     super.key,
     required this.label,
     required this.controller,
@@ -12,6 +12,7 @@ class TextFormCustom extends StatelessWidget {
     this.hintText,
     this.prefixIcon,
     this.suffixIcon,
+    this.fillColor,
   });
 
   final String label;
@@ -21,8 +22,9 @@ class TextFormCustom extends StatelessWidget {
   final TextInputType keyboardType;
   final int? maxLength;
   final String? hintText;
-  final Icon? prefixIcon;
+  final IconData? prefixIcon;
   final Icon? suffixIcon;
+  Color? fillColor = const Color.fromARGB(200, 255, 255, 255) ;
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +38,13 @@ class TextFormCustom extends StatelessWidget {
         labelStyle: const TextStyle(fontWeight: FontWeight.w600),
         hintStyle: const TextStyle(fontWeight: FontWeight.w600),
         counterStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-        fillColor: const Color.fromARGB(200, 255, 255, 255),
+        fillColor: fillColor,
         filled: true,
         hintText: hintText ?? 'Ingrese su $label',
         label: Text(label),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         suffixIcon: suffixIcon,
-        prefixIcon: prefixIcon,
+        prefixIcon: Icon(prefixIcon),
         floatingLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
       ),
     );

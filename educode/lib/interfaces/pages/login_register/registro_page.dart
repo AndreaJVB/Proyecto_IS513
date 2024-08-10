@@ -73,10 +73,12 @@ class RegistroPage extends StatelessWidget {
                               TextFormCustom(
                                 label: "Nombre",
                                 controller: nombreController,
+                                validator: (valor)=>validar.validacionNombre(valor),
                               ),
                               TextFormCustom(
                                 label: "Apellido",
                                 controller: apellidoController,
+                                validator: (valor)=>validar.validacionApellido(valor),
                               ),
                               TextFormCustom(
                                 label: "Nombre Usuario",
@@ -112,6 +114,8 @@ class RegistroPage extends StatelessWidget {
                             funcion: () {
                               if (!formkey.currentState!.validate()) return;
                               createUsers.createUserWithEmailAndPassword(
+                                nombre: nombreController.text,
+                                lastName: apellidoController.text,
                                 email: correoController.text,
                                 password: passwordController.text,
                               );

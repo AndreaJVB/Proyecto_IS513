@@ -1,4 +1,5 @@
 class Validacion {
+  //CORREO
   String? validacionCorreo(String? textoValidar) {
     if (textoValidar == null || textoValidar.isEmpty) {
       return 'El correo es obligatorio';
@@ -11,7 +12,7 @@ class Validacion {
     }
     return null;
   }
-
+  //CONTRASEÑA
   String? validacionPassword(String? textoValidar) {
     if (textoValidar == null || textoValidar.isEmpty) {
       return 'La contraseña es obligatoria';
@@ -21,4 +22,19 @@ class Validacion {
     }
     return null;
   }
+  //NOMBRE
+  String? validacionNombre(String? textoValidar) {
+    if (textoValidar == null || textoValidar.isEmpty) {
+      return 'El nombre es obligatoria';
+    }
+    return null;
+  }
+  //APELLIDO
+   String? validacionApellido(String? textoValidar) {
+    if (textoValidar == null || textoValidar.isEmpty) {
+      return 'El nombre es obligatoria';
+    }
+    return null;
+  }
+  
 }

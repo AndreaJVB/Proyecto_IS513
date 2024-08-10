@@ -1,17 +1,23 @@
+import 'package:educode/controllers/auth.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/botonesLRI_custom.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/icono_cerrar.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
-import 'package:educode/interfaces/widgets/custom_textField.dart';
+import 'package:educode/interfaces/widgets/custom_textFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+  final correoControler = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final screenP = ScreenProperty(context: context);
+     final Auth ingresarCuenta= Auth();
+     //color
+     Color? fillColor = Colors.grey[200];
 
     return Scaffold(
       body: Stack(
@@ -49,25 +55,35 @@ class LoginPage extends StatelessWidget {
                           color: Colors.black87,
                         ),
                       ),
-                      const SizedBox(height: 30),
-                      TextFieldCustom(
-                        hintText: "Correo Electrónico",
-                        fillColor: Colors.grey[200],
-                        prefixIcono: Icons.email,
-                      ),
-                      const SizedBox(height: 20),
-                      TextFieldCustom(
-                        hintText: "Contraseña",
-                        fillColor: Colors.grey[200],
-                        obscureText: true,
-                        prefixIcono: Icons.lock,
-                      ),
+                      Form(
+                        child: Column(children: [
+                          const SizedBox(height: 30),
+                          TextFormCustom(
+                            label: "Correo", 
+                            controller: correoControler,
+                            fillColor: fillColor,
+                            prefixIcon: Icons.email,
+                            ),
+                            const SizedBox(height: 20),
+
+                           TextFormCustom(
+                            label: "Contraseña", 
+                            controller: passwordController,
+                            fillColor: fillColor,
+                            prefixIcon: Icons.password_outlined,
+                            obscureText: true,
+                            )
+                        ],)),
                       const SizedBox(height: 30),
                       OutlinedButtomInicio(
                         ancho: screenP.ancho,
                         size: Size(screenP.ancho * 0.8, 50),
                         texto: "Iniciar sesión",
-                        funcion: () {Get.toNamed('/home');},
+                        funcion: () {
+                            ingresarCuenta.signInWithEmailAndPassword(
+                              email: correoControler.text, 
+                              password: passwordController.text);    
+                        },
                         color: const Color.fromARGB(61, 177, 139, 89),
                         elevation: 20,
                       ),
