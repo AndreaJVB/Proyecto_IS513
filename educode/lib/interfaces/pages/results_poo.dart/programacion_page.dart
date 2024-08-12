@@ -22,7 +22,7 @@ class ProgramacionController extends GetxController {
   Future<void> _loadQuestions() async {
     final url =
         'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json';
-        
+
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -30,10 +30,10 @@ class ProgramacionController extends GetxController {
         questions.assignAll(data['programacion']);
         _startTimer();
       } else {
-        throw Exception('Eror al cargar preguntas');
+        throw Exception('Error al cargar preguntas');
       }
     } catch (error) {
-      print('Error cargando preguntass: $error');
+      print('Error cargando preguntas: $error');
     }
   }
 
@@ -77,16 +77,19 @@ class ProgramacionController extends GetxController {
   }
 }
 
-class Programacionpage extends StatelessWidget {
+class ProgramacionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProgramacionController controller = Get.put(ProgramacionController());
 
     return Scaffold(
-      backgroundColor: Colors.purple[100],
+      backgroundColor: Colors.grey[500],
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple[700],
         title: Text(
-            'Educode - Preguntas ${controller.currentQuestionIndex.value + 1}'),
+          'Programación',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Obx(() {
         if (controller.questions.isEmpty) {
@@ -100,11 +103,19 @@ class Programacionpage extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                question['pregunta'],
-                style: TextStyle(fontSize: 24),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  question['pregunta'],
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(height: 20),
               ...options.entries.map((entry) {
@@ -114,13 +125,22 @@ class Programacionpage extends StatelessWidget {
                     ? (isCorrect ? Colors.green : Colors.red)
                     : Colors.white;
 
-                return ElevatedButton(
-                  onPressed: () => controller._answerQuestion(entry.key),
-                  child: Text(entry.value),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    textStyle: TextStyle(fontSize: 20),
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: ElevatedButton(
+                    onPressed: () => controller._answerQuestion(entry.key),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: color,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      entry.value,
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }).toList(),
@@ -128,6 +148,7 @@ class Programacionpage extends StatelessWidget {
               Text(
                 'Tiempo restante: ${controller.timeLeft.value} segundos',
                 style: TextStyle(fontSize: 18, color: Colors.black),
+                textAlign: TextAlign.center,
               ),
             ],
           ),

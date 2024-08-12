@@ -30,10 +30,10 @@ class AlgoritmoController extends GetxController {
         questions.assignAll(data['algoritmo']);
         _startTimer();
       } else {
-        throw Exception('Eror al cargar preguntas');
+        throw Exception('Error al cargar preguntas');
       }
     } catch (error) {
-      print('Error cargando preguntass: $error');
+      print('Error cargando preguntas: $error');
     }
   }
 
@@ -83,10 +83,15 @@ class AlgoritmoPage extends StatelessWidget {
     final AlgoritmoController controller = Get.put(AlgoritmoController());
 
     return Scaffold(
-      backgroundColor: Colors.purple[100],
+      backgroundColor:
+          Colors.grey[500], // Fondo oscuro de la pantalla principal
       appBar: AppBar(
-        title: Obx(() => Text(
-            'Educode - Pregunta ${controller.currentQuestionIndex.value + 1}')),
+        backgroundColor:
+            Colors.deepPurple[700], // Fondo de la AppBar en color amarillo
+        title: Text(
+          'Algoritmo', // Título estático
+          style: TextStyle(color: Colors.black), // Texto del título en negro
+        ),
       ),
       body: Obx(() {
         if (controller.questions.isEmpty) {
@@ -100,11 +105,20 @@ class AlgoritmoPage extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                question['pregunta'],
-                style: TextStyle(fontSize: 24),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white, // Fondo blanco para la caja de la pregunta
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  question['pregunta'],
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(height: 20),
               ...options.entries.map((entry) {
@@ -114,13 +128,23 @@ class AlgoritmoPage extends StatelessWidget {
                     ? (isCorrect ? Colors.green : Colors.red)
                     : Colors.white;
 
-                return ElevatedButton(
-                  onPressed: () => controller._answerQuestion(entry.key),
-                  child: Text(entry.value),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    textStyle: TextStyle(fontSize: 20),
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: ElevatedButton(
+                    onPressed: () => controller._answerQuestion(entry.key),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor:
+                          color, // Fondo verde o rojo si está seleccionada, blanco si no lo está
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      entry.value,
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }).toList(),
@@ -128,7 +152,10 @@ class AlgoritmoPage extends StatelessWidget {
               Text(
                 'Tiempo restante: ${controller.timeLeft.value} segundos',
                 style: TextStyle(
-                    fontSize: 18, color: const Color.fromARGB(255, 26, 7, 6)),
+                  fontSize: 18,
+                  color: Colors.white, // Texto del temporizador en blanco
+                ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),

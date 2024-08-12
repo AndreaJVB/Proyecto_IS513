@@ -20,10 +20,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
- // Inicializa GetStorage
+  // Inicializa GetStorage
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/home',
       getPages: [
         GetPage(name: '/', page: () => const Inicio()),
         GetPage(name: '/login', page: () => LoginPage()),
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/solitario', page: () => SolitarioPage()),
         GetPage(name: '/multijugador', page: () => MultijugadorPage()),
         GetPage(name: '/basedatos', page: () => BasedatosPage()),
-        GetPage(name: '/programacion', page: () => Programacionpage()),
+        GetPage(name: '/programacion', page: () => ProgramacionPage()),
         GetPage(
           name: '/poo',
           page: () => POOPage(),
@@ -50,7 +49,7 @@ class MyApp extends StatelessWidget {
             name: '/lenguaje_programacion',
             page: () => LenguajeProgramacionPage()),
         GetPage(name: '/algoritmo', page: () => AlgoritmoPage()),
-        GetPage(name: '/password', page: ()=> ForgetPasswordPage())
+        GetPage(name: '/password', page: () => ForgetPasswordPage())
       ],
     );
   }

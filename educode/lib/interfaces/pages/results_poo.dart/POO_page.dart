@@ -30,10 +30,10 @@ class POOController extends GetxController {
         questions.assignAll(data['POO']);
         _startTimer();
       } else {
-        throw Exception('Eror al cargar preguntas');
+        throw Exception('Error al cargar preguntas');
       }
     } catch (error) {
-      print('Error cargando preguntass: $error');
+      print('Error cargando preguntas: $error');
     }
   }
 
@@ -82,10 +82,15 @@ class POOPage extends StatelessWidget {
     final POOController controller = Get.put(POOController());
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 148, 22, 170),
+      backgroundColor:
+          Colors.grey[500], // Fondo oscuro de la pantalla principal
       appBar: AppBar(
-        title: Obx(() => Text(
-            'Educode - Pregunta ${controller.currentQuestionIndex.value + 1}')),
+        backgroundColor:
+            Colors.deepPurple[700], // Fondo de la AppBar en color amarillo
+        title: Text(
+          'POO', // Título estático
+          style: TextStyle(color: Colors.black), // Texto del título en negro
+        ),
       ),
       body: Obx(() {
         if (controller.questions.isEmpty) {
@@ -99,9 +104,22 @@ class POOPage extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(question['pregunta'], style: TextStyle(fontSize: 24)),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white, // Fondo blanco para la caja de la pregunta
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  question['pregunta'],
+                  style: TextStyle(
+                      fontSize: 20), // Tamaño de la letra de la pregunta
+                  textAlign: TextAlign.center,
+                ),
+              ),
               SizedBox(height: 20),
               ...options.entries.map((entry) {
                 final isSelected = controller.selectedOption.value == entry.key;
@@ -110,19 +128,38 @@ class POOPage extends StatelessWidget {
                     ? (isCorrect ? Colors.green : Colors.red)
                     : Colors.white;
 
-                return ElevatedButton(
-                  onPressed: () => controller._answerQuestion(entry.key),
-                  child: Text(entry.value),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    textStyle: TextStyle(fontSize: 20),
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: ElevatedButton(
+                    onPressed: () => controller._answerQuestion(entry.key),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor:
+                          color, // Fondo verde o rojo si está seleccionada, blanco si no lo está
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      entry.value,
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors
+                              .black), // Tamaño de la letra de las opciones
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }).toList(),
               SizedBox(height: 20),
-              Text('Tiempo restante: ${controller.timeLeft.value} segundos',
-                  style: TextStyle(fontSize: 18, color: Colors.red)),
+              Text(
+                'Tiempo restante: ${controller.timeLeft.value} segundos',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white, // Texto del temporizador en blanco
+                ),
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
         );

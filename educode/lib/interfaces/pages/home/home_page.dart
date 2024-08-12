@@ -79,19 +79,33 @@ class HomePage extends StatelessWidget {
                   children: [
                     TableRow(
                       children: [
-                        CategoriaBoton(nombre: "/basedatos", icono: Icons.storage, texto: 'Base de Datos',),
-                        CategoriaBoton(nombre:'/programacion1' , icono: Icons.computer, texto: 'Programación'),
+                        CategoriaBoton(
+                          nombre: "/basedatos",
+                          icono: Icons.storage,
+                          texto: 'Base de Datos',
+                        ),
+                        CategoriaBoton(
+                            nombre: '/programacion',
+                            icono: Icons.computer,
+                            texto: 'Programación'),
                       ],
                     ),
                     TableRow(
                       children: [
-                        CategoriaBoton(nombre: '/poo', icono: Icons.code, texto: 'POO'),
-                        CategoriaBoton(nombre: '/algoritmo', icono: Icons.functions, texto: 'Algoritmo')
+                        CategoriaBoton(
+                            nombre: '/poo', icono: Icons.code, texto: 'POO'),
+                        CategoriaBoton(
+                            nombre: '/algoritmo',
+                            icono: Icons.functions,
+                            texto: 'Algoritmo')
                       ],
                     ),
                   ],
                 ),
-                CategoriaBoton(nombre: '/lenguaje_programacion', icono: Icons.language, texto: 'Lenguaje de Programación')
+                CategoriaBoton(
+                    nombre: '/lenguaje_programacion',
+                    icono: Icons.language,
+                    texto: 'Lenguaje de Programación')
               ],
             ),
           ),
@@ -102,12 +116,11 @@ class HomePage extends StatelessWidget {
 }
 
 class CategoriaBoton extends StatelessWidget {
-  const CategoriaBoton({
-    super.key,
-    required this.nombre,
-    required this.icono,
-    required this.texto
-  });
+  const CategoriaBoton(
+      {super.key,
+      required this.nombre,
+      required this.icono,
+      required this.texto});
   final String nombre;
   final IconData icono;
   final String texto;
