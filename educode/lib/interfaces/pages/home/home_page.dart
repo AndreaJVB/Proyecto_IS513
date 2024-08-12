@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: ElevatedButton(
-                      onPressed: () => Get.toNamed('/programacion1'),
+                      onPressed: () => Get.toNamed('/programacion'),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -45,8 +45,7 @@ class HomePage extends StatelessWidget {
                       child: Column(
                         children: [
                           Icon(Icons.computer, size: 24),
-                          Text('Programacion 1',
-                              style: TextStyle(fontSize: 16)),
+                          Text('Programacion', style: TextStyle(fontSize: 16)),
                         ],
                       ),
                     ),
@@ -58,7 +57,8 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: ElevatedButton(
-                      onPressed: () => Get.toNamed('/programacion2'),
+                      onPressed: () =>
+                          Get.toNamed('/Programacion Orientada a Objeto'),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                       child: Column(
                         children: [
                           Icon(Icons.code, size: 24),
-                          Text('Programacion 2',
+                          Text('Programacion Orientada Objeto',
                               style: TextStyle(fontSize: 16)),
                         ],
                       ),
