@@ -1,11 +1,17 @@
 import 'package:educode/controllers/user_controller.dart';
 import 'package:educode/interfaces/pages/home/home_page.dart';
 import 'package:educode/interfaces/pages/settings/account_page.dart';
+import 'package:educode/interfaces/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SolitarioPage extends StatelessWidget {
   final UserController getUser = Get.find<UserController>();
+  final _navigation = <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+        BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historial'),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+      ];
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -32,19 +38,7 @@ class SolitarioPage extends StatelessWidget {
             child: _widgetOptions.elementAt(getUser.selectedIndex.value),
           );
         }),
-        bottomNavigationBar: Obx(() {
-          return BottomNavigationBar(
-            backgroundColor: Colors.purple[300],
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-              BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historia'),
-              BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-            ],
-            currentIndex: getUser.selectedIndex.value,
-            selectedItemColor: Colors.black,
-            onTap: (index) => getUser.selectedIndex.value = index,
-          );
-        }),
+        bottomNavigationBar: BottomNavigationBarCustom(indexs: getUser.selectedIndex, itemsBar: _navigation,),
       ),
     );
   }

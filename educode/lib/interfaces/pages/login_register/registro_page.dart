@@ -134,6 +134,7 @@ class RegistroPage extends StatelessWidget {
                             text: "Registrarse con Google",
                             onPressed: () {},
                           ),
+                          
                         ],
                       ),
                     ),

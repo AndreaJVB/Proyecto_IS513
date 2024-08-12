@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 class UserController extends GetxController {
   final Rx<User?> user = Rx<User?>(FirebaseAuth.instance.currentUser);
   final RxInt selectedIndex = 0.obs;
+  final RxInt selectedIndexMulti = 0.obs;
+  
 
   @override
   void onInit() {
@@ -58,7 +60,7 @@ class UserController extends GetxController {
         await currentUser.updateProfile(displayName: nombre);
         
         // Verificar el correo antes de actualizarlo
-        await currentUser.verifyBeforeUpdateEmail(email);
+        await currentUser.verifyBeforeUpdateEmail(email, );
         
         // Recargar el usuario para obtener la información actualizada
         await currentUser.reload();
@@ -70,6 +72,16 @@ class UserController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', 'No se pudo actualizar los datos: $e', backgroundColor: Colors.red[200]);
+    }
+  }
+
+  //CORREO DE RECUPERACION DE CONTRASEÑA
+  Future<void> recuperarContrasena(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      Get.snackbar('Éxito', 'Correo de recuperación enviado a $email', backgroundColor: Colors.green);
+    } catch (e) {
+      Get.snackbar('Error', 'No se pudo enviar el correo de recuperación: $e', backgroundColor: Colors.red[200]);
     }
   }
 }

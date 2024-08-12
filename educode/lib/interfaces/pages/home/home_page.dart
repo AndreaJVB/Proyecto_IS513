@@ -1,4 +1,5 @@
 import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,127 +8,127 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenP = ScreenProperty(context: context);
     return Scaffold(
       appBar: AppBar(
-          title: Obx(() {
-            final user = getUser.user.value?.displayName;
-           
-            return FittedBox(child: Text("Bienvenido $user"));
-          }),
-        ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Table(
+        backgroundColor: Color(0xFF3A1C71),
+        automaticallyImplyLeading: false, // Oculta la flecha de retroceso
+        toolbarHeight: screenP.altura * 0.25,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage("lib/assets/fondo.jpg"),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               children: [
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ElevatedButton(
-                        onPressed: () => Get.toNamed('/basedatos'),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(Icons.storage, size: 24),
-                            Text('Basedatos', style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ElevatedButton(
-                        onPressed: () => Get.toNamed('/programacion1'),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(Icons.computer, size: 24),
-                            Text('Programacion 1',
-                                style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 50, color: Colors.grey),
                 ),
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ElevatedButton(
-                        onPressed: () => Get.toNamed('/programacion2'),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(Icons.code, size: 24),
-                            Text('Programacion 2',
-                                style: TextStyle(fontSize: 16)),
-                          ],
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Hola,",
+                        style: TextStyle(
+                          fontSize: 26,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ElevatedButton(
-                        onPressed: () => Get.toNamed('/algoritmo'),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                      SizedBox(height: 4),
+                      Flexible(
+                        child: Text(
+                          "${getUser.user.value!.displayName}",
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
                           ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(Icons.functions, size: 24),
-                            Text('Algoritmo', style: TextStyle(fontSize: 16)),
-                          ],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: ElevatedButton(
-                onPressed: () => Get.toNamed('/lenguaje_programacion'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                ),
-                child: Column(
+          ),
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF5F2C82), Color(0xFF49A09D)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Table(
                   children: [
-                    Icon(Icons.language, size: 24),
-                    Text('Lenguaje de Programación',
-                        style: TextStyle(fontSize: 16)),
+                    TableRow(
+                      children: [
+                        CategoriaBoton(nombre: "/basedatos", icono: Icons.storage, texto: 'Base de Datos',),
+                        CategoriaBoton(nombre:'/programacion1' , icono: Icons.computer, texto: 'Programación 1'),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        CategoriaBoton(nombre: '/programacion2', icono: Icons.code, texto: 'Programación 2'),
+                        CategoriaBoton(nombre: '/algoritmo', icono: Icons.functions, texto: 'Algoritmo')
+                      ],
+                    ),
                   ],
                 ),
-              ),
+                CategoriaBoton(nombre: '/lenguaje_programacion', icono: Icons.language, texto: 'Lenguaje de Programación')
+              ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CategoriaBoton extends StatelessWidget {
+  const CategoriaBoton({
+    super.key,
+    required this.nombre,
+    required this.icono,
+    required this.texto
+  });
+  final String nombre;
+  final IconData icono;
+  final String texto;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: ElevatedButton(
+        onPressed: () => Get.toNamed(nombre),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFF3A6073),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        ),
+        child: Column(
+          children: [
+            Icon(icono, size: 40, color: Colors.white),
+            SizedBox(height: 10),
+            Text('Base de Datos', style: TextStyle(fontSize: 16, color: Colors.white)),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:educode/interfaces/pages/login_register/recuperar_contra.dart';
 import 'package:educode/mode_page.dart';
 import 'package:educode/interfaces/pages/game_mode/multijugador_page.dart';
 import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/programacion2', page: () => Programacion2Page()),
         GetPage(name: '/lenguaje_programacion', page: () => LenguajePage()),
         GetPage(name: '/algoritmo', page: () => AlgoritmoPage()),
+        GetPage(name: '/password', page: ()=> ForgetPasswordPage())
       ],
     );
   }

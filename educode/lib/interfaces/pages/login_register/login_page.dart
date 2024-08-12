@@ -95,6 +95,9 @@ class LoginPage extends StatelessWidget {
                         text: "Iniciar sesión con Google",
                         onPressed: () {},
                       ),
+                      Align(child: TextButton(onPressed: (){
+                        Get.toNamed('/password');
+                      }, child: Text("Olvidaste la contraseña?"),),alignment: Alignment.bottomLeft,)
                     ],
                   ),
                 ),

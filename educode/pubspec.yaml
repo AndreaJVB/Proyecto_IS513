@@ -35,6 +35,8 @@ flutter:
   uses-material-design: true
   assets:
     - lib/assets/coding.png
+    - lib/assets/contra.png
+    - lib/assets/fondo.jpg
   # Uncomment and add your custom fonts here if needed
   # fonts:
   #   - family: Schyler
