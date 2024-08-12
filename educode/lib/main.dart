@@ -5,11 +5,11 @@ import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
 import 'package:educode/interfaces/pages/login_register/inicio.dart';
 import 'package:educode/interfaces/pages/login_register/login_page.dart';
 import 'package:educode/interfaces/pages/login_register/registro_page.dart';
-import 'package:educode/interfaces/pages/topic_pages/algoritmo_page.dart';
-import 'package:educode/interfaces/pages/topic_pages/basedatos_page.dart';
-import 'package:educode/interfaces/pages/topic_pages/lenguaje_programaicon_page.dart';
-import 'package:educode/interfaces/pages/topic_pages/programacion1_page.dart';
-import 'package:educode/interfaces/pages/topic_pages/programacion2_page.dart';
+import 'package:educode/interfaces/pages/results_poo.dart/algoritmo_page.dart';
+import 'package:educode/interfaces/pages/results_poo.dart/basedatos_page.dart';
+import 'package:educode/interfaces/pages/results_poo.dart/lenguaje_programacion_page.dart';
+import 'package:educode/interfaces/pages/results_poo.dart/programacion_page.dart';
+import 'package:educode/interfaces/pages/results_poo.dart/POO_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -37,13 +37,18 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => const Inicio()),
         GetPage(name: '/login', page: () => LoginPage()),
         GetPage(name: '/registro', page: () => RegistroPage()),
-        GetPage(name: '/home', page: () => const ModePage()),
+        GetPage(name: '/home', page: () => ModePage()),
         GetPage(name: '/solitario', page: () => SolitarioPage()),
         GetPage(name: '/multijugador', page: () => MultijugadorPage()),
         GetPage(name: '/basedatos', page: () => BasedatosPage()),
-        GetPage(name: '/programacion1', page: () => Programacion1Page()),
-        GetPage(name: '/programacion2', page: () => Programacion2Page()),
-        GetPage(name: '/lenguaje_programacion', page: () => LenguajePage()),
+        GetPage(name: '/programacion', page: () => Programacionpage()),
+        GetPage(
+          name: '/poo',
+          page: () => POOPage(),
+        ),
+        GetPage(
+            name: '/lenguaje_programacion',
+            page: () => LenguajeProgramacionPage()),
         GetPage(name: '/algoritmo', page: () => AlgoritmoPage()),
         GetPage(name: '/password', page: ()=> ForgetPasswordPage())
       ],

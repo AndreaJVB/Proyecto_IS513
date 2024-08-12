@@ -80,12 +80,12 @@ class HomePage extends StatelessWidget {
                     TableRow(
                       children: [
                         CategoriaBoton(nombre: "/basedatos", icono: Icons.storage, texto: 'Base de Datos',),
-                        CategoriaBoton(nombre:'/programacion1' , icono: Icons.computer, texto: 'Programación 1'),
+                        CategoriaBoton(nombre:'/programacion1' , icono: Icons.computer, texto: 'Programación'),
                       ],
                     ),
                     TableRow(
                       children: [
-                        CategoriaBoton(nombre: '/programacion2', icono: Icons.code, texto: 'Programación 2'),
+                        CategoriaBoton(nombre: '/poo', icono: Icons.code, texto: 'POO'),
                         CategoriaBoton(nombre: '/algoritmo', icono: Icons.functions, texto: 'Algoritmo')
                       ],
                     ),
@@ -128,7 +128,7 @@ class CategoriaBoton extends StatelessWidget {
           children: [
             Icon(icono, size: 40, color: Colors.white),
             SizedBox(height: 10),
-            Text('Base de Datos', style: TextStyle(fontSize: 16, color: Colors.white)),
+            Text(texto, style: TextStyle(fontSize: 16, color: Colors.white)),
           ],
         ),
       ),

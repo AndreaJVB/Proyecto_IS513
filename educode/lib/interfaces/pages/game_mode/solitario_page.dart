@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SolitarioPage extends StatelessWidget {
-  final UserController getUser = Get.find<UserController>();
+   
   final _navigation = <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
         BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historial'),
@@ -21,6 +21,7 @@ class SolitarioPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserController getUser = Get.find<UserController>();
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
     });
