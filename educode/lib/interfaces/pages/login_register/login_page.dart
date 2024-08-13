@@ -93,7 +93,9 @@ class LoginPage extends StatelessWidget {
                       SignInButton(
                         Buttons.GoogleDark,
                         text: "Iniciar sesión con Google",
-                        onPressed: () {},
+                        onPressed: () {
+                          ingresarCuenta.handleGoogleSignIn();
+                        },
                       ),
                       Align(child: TextButton(onPressed: (){
                         Get.toNamed('/password');

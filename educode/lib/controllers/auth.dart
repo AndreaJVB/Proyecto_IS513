@@ -1,10 +1,12 @@
 import 'package:educode/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   User? get currentUser => _firebaseAuth.currentUser;
   final getUser = Get.put<UserController>(UserController());
@@ -66,4 +68,35 @@ class Auth {
       print("Error: ${e.message}");
     }
   }
+
+  Future<void> handleGoogleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return;
+      }
+      
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      
+      // Sign in to Firebase with the obtained credentials
+      UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        getUser.user.value = userCredential.user;
+        Get.offAllNamed('/home');
+      }
+    } on FirebaseAuthException catch (e) {
+      print('Firebase Auth Error: ${e.message}');
+      Get.snackbar('Error', 'Google Sign-In failed: ${e.message}');
+    } catch (e) {
+      print('General Error: ${e.toString()}');
+      Get.snackbar('Error', 'An error occurred during Google Sign-In.');
+    }
+  }
+
 }

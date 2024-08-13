@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class UserController extends GetxController {
   final Rx<User?> user = Rx<User?>(FirebaseAuth.instance.currentUser);
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final RxInt selectedIndex = 0.obs;
   final RxInt selectedIndexMulti = 0.obs;
   
@@ -21,6 +23,7 @@ class UserController extends GetxController {
   //CERRAR SESION
   Future<void> cerrarSesion() async {
     await FirebaseAuth.instance.signOut();
+    await _googleSignIn.signOut();
     Get.offAllNamed('/'); // Navega a la pantalla de inicio o login
   }
 

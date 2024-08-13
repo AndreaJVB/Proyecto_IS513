@@ -165,6 +165,7 @@ class ProfilePage extends StatelessWidget {
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.redAccent),
                   onTap: () {
                     getUser.cerrarSesion();
+                    
                   },
                 ),
               ),

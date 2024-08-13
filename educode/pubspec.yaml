@@ -25,6 +25,7 @@ dependencies:
   ionicons: ^0.2.2
   http: ^1.2.2
   get_storage: ^2.1.1
+  google_sign_in: ^6.2.1
   
 
 dev_dependencies:
