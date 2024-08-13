@@ -28,6 +28,7 @@ class ProgramacionController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         questions.assignAll(data['programacion']);
+        questions.shuffle(); // Aleatorizar las preguntas
         _startTimer();
       } else {
         throw Exception('Error al cargar preguntas');
@@ -44,30 +45,47 @@ class ProgramacionController extends GetxController {
         timeLeft.value--;
       } else {
         _timer?.cancel();
-        _nextQuestion();
+        _timeOut(); // Manejar el tiempo agotado
       }
     });
   }
 
   void _answerQuestion(String selectedOption) {
-    _timer?.cancel();
-    if (selectedOption ==
-        questions[currentQuestionIndex.value]['respuesta_marcada']) {
-      score++;
+    if (this.selectedOption.isEmpty) {
+      _timer?.cancel();
+      if (selectedOption ==
+          questions[currentQuestionIndex.value]['respuesta_marcada']) {
+        score++;
+      }
+      this.selectedOption.value = selectedOption;
+
+      // Esperar un segundo antes de pasar a la siguiente pregunta o mostrar resultados
+      Future.delayed(Duration(seconds: 1), () {
+        if (currentQuestionIndex.value < questions.length - 1) {
+          _nextQuestion();
+        } else {
+          Get.to(() =>
+              ResultsProgramacion(score: score.value, total: questions.length));
+        }
+      });
     }
-    this.selectedOption.value = selectedOption;
-    Future.delayed(Duration(seconds: 1), () => _nextQuestion());
+  }
+
+  void _timeOut() {
+    if (selectedOption.isEmpty) {
+      if (currentQuestionIndex.value < questions.length - 1) {
+        _nextQuestion();
+      } else {
+        Get.to(() =>
+            ResultsProgramacion(score: score.value, total: questions.length));
+      }
+    }
   }
 
   void _nextQuestion() {
-    if (currentQuestionIndex.value < questions.length - 1) {
-      currentQuestionIndex.value++;
-      selectedOption.value = '';
-      _startTimer();
-    } else {
-      Get.to(() =>
-          ResultsProgramacion(score: score.value, total: questions.length));
-    }
+    currentQuestionIndex.value++;
+    selectedOption.value = '';
+    _startTimer();
   }
 
   @override
@@ -89,6 +107,7 @@ class ProgramacionPage extends StatelessWidget {
         title: Text(
           'Programación',
           style: TextStyle(color: Colors.black),
+          textAlign: TextAlign.center, // Centrar el título
         ),
       ),
       body: Obx(() {

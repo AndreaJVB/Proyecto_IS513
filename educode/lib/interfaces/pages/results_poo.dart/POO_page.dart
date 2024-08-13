@@ -28,6 +28,7 @@ class POOController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         questions.assignAll(data['POO']);
+        questions.shuffle(); // Aleatorizar el orden de las preguntas
         _startTimer();
       } else {
         throw Exception('Error al cargar preguntas');
@@ -44,29 +45,46 @@ class POOController extends GetxController {
         timeLeft.value--;
       } else {
         _timer?.cancel();
-        _nextQuestion();
+        _timeOut(); // Si se acaba el tiempo sin seleccionar ninguna opción
       }
     });
   }
 
   void _answerQuestion(String selectedOption) {
-    _timer?.cancel();
-    if (selectedOption ==
-        questions[currentQuestionIndex.value]['respuesta_marcada']) {
-      score++;
+    if (this.selectedOption.isEmpty) {
+      _timer?.cancel();
+      if (selectedOption ==
+          questions[currentQuestionIndex.value]['respuesta_marcada']) {
+        score++;
+      }
+      this.selectedOption.value = selectedOption;
+
+      // Esperar un segundo antes de pasar a la siguiente pregunta o mostrar resultados
+      Future.delayed(Duration(seconds: 1), () {
+        if (currentQuestionIndex.value < questions.length - 1) {
+          _nextQuestion();
+        } else {
+          Get.to(() => ResultsPOO(score: score.value, total: questions.length));
+        }
+      });
     }
-    this.selectedOption.value = selectedOption;
-    Future.delayed(Duration(seconds: 1), () => _nextQuestion());
+  }
+
+  void _timeOut() {
+    // Si el tiempo se acaba y no se ha seleccionado opción, avanza como incorrecta
+    if (selectedOption.isEmpty) {
+      if (currentQuestionIndex.value < questions.length - 1) {
+        _nextQuestion();
+      } else {
+        Get.to(() => ResultsPOO(score: score.value, total: questions.length));
+      }
+    }
   }
 
   void _nextQuestion() {
-    if (currentQuestionIndex.value < questions.length - 1) {
-      currentQuestionIndex.value++;
-      selectedOption.value = '';
-      _startTimer();
-    } else {
-      Get.to(() => ResultsPOO(score: score.value, total: questions.length));
-    }
+    currentQuestionIndex.value++;
+    selectedOption.value = '';
+    _startTimer();
   }
 
   @override
@@ -90,6 +108,7 @@ class POOPage extends StatelessWidget {
         title: Text(
           'POO', // Título estático
           style: TextStyle(color: Colors.black), // Texto del título en negro
+          textAlign: TextAlign.center, // Centrando el título
         ),
       ),
       body: Obx(() {

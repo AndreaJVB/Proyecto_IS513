@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => const Inicio()),
         GetPage(name: '/login', page: () => LoginPage()),

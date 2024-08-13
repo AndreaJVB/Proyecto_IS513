@@ -10,22 +10,36 @@ class ResultsProgramacion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigoAccent[100],
-      appBar: AppBar(
-        title: Text('Resultados'),
-      ),
+      backgroundColor: Colors.blue[100], // Fondo azul claro
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.blue[100], // Fondo azul claro para el contenedor
+              child: Text(
+                'Resultado de Programación:',
+                style: TextStyle(
+                  fontSize: 22, // Tamaño de letra 22
+                  color: Colors.black, // Texto negro
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(height: 20),
             Text(
-              'Tu puntaje final es: $score/$total',
-              style: TextStyle(fontSize: 24),
+              'Puntaje: $score/$total',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.black, // Texto negro
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Get.offAllNamed('/solitario');
+                Get.offAllNamed(
+                    '/solitario'); // Navegar a la pantalla principal
               },
               child: Text('Volver al Inicio'),
             ),

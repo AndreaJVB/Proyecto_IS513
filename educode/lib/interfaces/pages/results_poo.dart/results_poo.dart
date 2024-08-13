@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ResultsPOO extends StatelessWidget {
   final int score;
@@ -9,19 +10,38 @@ class ResultsPOO extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Resultados'),
-      ),
+      backgroundColor: Colors.blue[100], // Fondo azul claro
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Puntaje: $score/$total', style: TextStyle(fontSize: 24)),
+            Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.blue[100], // Fondo azul claro para el contenedor
+              child: Text(
+                'Resultado de Programación Orientada a Objetos:',
+                style: TextStyle(
+                  fontSize: 22, // Tamaño de letra 22
+                  color: Colors.black, // Texto negro
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Puntaje: $score/$total',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.black, // Texto negro
+              ),
+            ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () =>
-                  Navigator.popUntil(context, (route) => route.isFirst),
-              child: Text('Volver al inicio'),
+              onPressed: () {
+                Get.offAllNamed(
+                    '/solitario'); // Navegar a la pantalla principal
+              },
+              child: Text('Volver al Inicio'),
             ),
           ],
         ),
