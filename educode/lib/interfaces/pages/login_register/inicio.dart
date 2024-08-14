@@ -1,4 +1,5 @@
 
+import 'package:educode/controllers/avatar_controller.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/botonesLRI_custom.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,9 @@ class Inicio extends StatelessWidget{
     final textStyle3 = TextStyle(fontFamily: textStyle2.fontFamily, fontSize: 17, color: Colors.white, fontWeight: FontWeight.w600);
     final textStyle4 = TextStyle(fontFamily: textStyle3.fontFamily, fontSize: 15, fontWeight: FontWeight.w500);
     /**------NAVEGACION------- */
+  
     
+
     return Scaffold(
       body: Container(
         width: screenP.ancho,

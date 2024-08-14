@@ -1,3 +1,4 @@
+
 import 'package:educode/controllers/user_controller.dart';
 import 'package:educode/interfaces/pages/settings/widgets/account_text_custom.dart';
 import 'package:educode/interfaces/pages/settings/widgets/text_password_custom.dart';
@@ -19,6 +20,7 @@ class ProfilePage extends StatelessWidget {
     TextEditingController email = TextEditingController(text: getUser.user.value?.email ?? '');
     TextEditingController password = TextEditingController();
     TextEditingController newPassword = TextEditingController();
+    CircleAvatarCustom().avatar.avatar.value = getUser.user.value?.photoURL ?? "";
 
     return Scaffold(
       appBar: AppBar(
@@ -118,10 +120,10 @@ class ProfilePage extends StatelessWidget {
                     ),
                     
                     SizedBox(height: 10),
-                    Obx(() => (isEditName.value || isEditEmail.value)
+                    Obx(() => (isEditName.value || isEditEmail.value || CircleAvatarCustom().avatar.avatar.value != getUser.user.value?.photoURL)
                         ? ElevatedButton(
                             onPressed: () {
-                              getUser.actualizarDatos(email.text, nombre.text).then((_) {
+                              getUser.actualizarDatos(email.text, nombre.text, CircleAvatarCustom().avatar.avatar.value ).then((_) {
                                 // Después de actualizar los datos, restablecer el modo de edición
                                 isEditName.value = false;
                                 isEditEmail.value = false;

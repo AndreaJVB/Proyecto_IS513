@@ -11,18 +11,18 @@ class SolitarioPage extends StatelessWidget {
     BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historial'),
     BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
   ];
+  final UserController getUser = Get.find<UserController>();
 
-  static final List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
+  
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+    HomePage(getUser: getUser,),
     Text('Solitario',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
     ProfilePage(),
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    // Asegurarse de que el controlador esté registrado
-    final UserController getUser = Get.put(UserController());
 
     return GestureDetector(
       onHorizontalDragUpdate: (details) {

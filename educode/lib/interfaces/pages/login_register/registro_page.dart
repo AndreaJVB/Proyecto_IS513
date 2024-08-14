@@ -1,4 +1,5 @@
 import 'package:educode/controllers/auth.dart';
+import 'package:educode/controllers/avatar_controller.dart';
 import 'package:educode/controllers/validaciones.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/icono_cerrar.dart';
 import 'package:educode/interfaces/widgets/circle_avatar.dart';
@@ -22,12 +23,14 @@ class RegistroPage extends StatelessWidget {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   final Auth createUsers = Auth();
+ final avatar = CircleAvatarCustom();
 
   @override
   Widget build(BuildContext context) {
     // Variables
     final screenP = ScreenProperty(context: context);
     final validar = Validacion();
+   
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -45,9 +48,9 @@ class RegistroPage extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: const Align(
+                child: Align(
                   alignment: Alignment.center,
-                  child: CircleAvatarCustom(), // AVATAR
+                  child: avatar, // AVATAR
                 ),
               ),
               Align(
@@ -109,25 +112,36 @@ class RegistroPage extends StatelessWidget {
                           ),
                           SizedBox(height: 20),
                           OutlinedButtomInicio(
-                            ancho: screenP.ancho * 0.7,
-                            texto: "Registrarse",
-                            funcion: () {
-                              if (!formkey.currentState!.validate()) return;
-                              createUsers.createUserWithEmailAndPassword(
-                                nombre: nombreController.text,
-                                lastName: apellidoController.text,
-                                email: correoController.text,
-                                password: passwordController.text,
-                              );
-                            },
-                            color: Colors.white,
-                            textStyle: TextStyle(
-                              color: Color(0xFFFF5F6D),
-                              fontWeight: FontWeight.bold,
-                            ),
-                            size: Size(screenP.ancho * 0.7, 50),
-                            elevation: 5,
-                          ),
+                                ancho: screenP.ancho * 0.7,
+                                texto: "Registrarse",
+                                funcion: () {
+                                  if (avatar.avatar.avatar.value.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Por favor, selecciona un avatar')),
+                                    );
+                                    return;
+                                  }
+
+                                  if (!formkey.currentState!.validate()) return;
+
+                                  createUsers.createUserWithEmailAndPassword(
+                                    nombre: nombreController.text,
+                                    lastName: apellidoController.text,
+                                    email: correoController.text,
+                                    password: passwordController.text,
+                                    image: avatar.avatar.avatar.value,
+                                  ).then((_){
+                                    avatar.avatar.avatar.value = ''; 
+                                  });
+                                },
+                                    color: Colors.white,
+                                    textStyle: TextStyle(
+                                      color: Color(0xFFFF5F6D),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    size: Size(screenP.ancho * 0.7, 50),
+                                    elevation: 5,
+                                  ),
                           SizedBox(height: 20),
                           SignInButton(
                             Buttons.GoogleDark,

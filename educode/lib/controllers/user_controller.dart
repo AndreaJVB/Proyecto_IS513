@@ -9,7 +9,6 @@ class UserController extends GetxController {
   final RxInt selectedIndex = 0.obs;
   final RxInt selectedIndexMulti = 0.obs;
   
-
   @override
   void onInit() {
     super.onInit();
@@ -17,33 +16,43 @@ class UserController extends GetxController {
     // Escuchar cambios en la autenticación
     FirebaseAuth.instance.authStateChanges().listen((User? newUser) {
       user.value = newUser;
+      if (newUser != null) {
+        // Actualizar datos del usuario si es necesario
+        updateUserData();
+      }
     });
   }
 
-  //CERRAR SESION
+  Future<void> updateUserData() async {
+    if (user.value != null) {
+      try {
+        // Recargar el usuario para obtener la información actualizada
+        await user.value!.reload();
+        user.value = FirebaseAuth.instance.currentUser;
+      } catch (e) {
+        print('Error al actualizar los datos del usuario: $e');
+      }
+    }
+  }
+
   Future<void> cerrarSesion() async {
     await FirebaseAuth.instance.signOut();
     await _googleSignIn.signOut();
     Get.offAllNamed('/'); // Navega a la pantalla de inicio o login
   }
 
-  //CAMBIAR CONTRA DNTRO DE LA SESION
   Future<void> cambiarContrasena(String contrasenaActual, String nuevaContrasena) async {
     try {
       final User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
-        // Reautenticar al usuario con la contraseña actual
         final AuthCredential credential = EmailAuthProvider.credential(
           email: currentUser.email!,
           password: contrasenaActual,
         );
 
         await currentUser.reauthenticateWithCredential(credential);
-
-        // Cambiar la contraseña
         await currentUser.updatePassword(nuevaContrasena);
-        await FirebaseAuth.instance.currentUser?.reload(); // Recargar el usuario para obtener la información actualizada
-        user.value = FirebaseAuth.instance.currentUser; // Actualizar el observable
+        await updateUserData(); // Actualizar datos del usuario
         Get.snackbar('Éxito', 'Contraseña cambiada con éxito', backgroundColor: Colors.green);
       } else {
         Get.snackbar('Error', 'No hay usuario autenticado');
@@ -53,21 +62,15 @@ class UserController extends GetxController {
     }
   }
 
-  //ACTUALIZAR EMAIL Y NOMBRE
-  Future<void> actualizarDatos(String email, String nombre) async {
+  Future<void> actualizarDatos(String email, String nombre, String image) async {
     try {
       final currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser != null) {
-        // Actualizar el nombre
         await currentUser.updateProfile(displayName: nombre);
-        
-        // Verificar el correo antes de actualizarlo
-        await currentUser.verifyBeforeUpdateEmail(email, );
-        
-        // Recargar el usuario para obtener la información actualizada
-        await currentUser.reload();
-        user.value = FirebaseAuth.instance.currentUser;
+        await currentUser.verifyBeforeUpdateEmail(email);
+        await currentUser.updatePhotoURL(image);
+        await updateUserData(); // Actualizar datos del usuario
         
         Get.snackbar('Éxito', 'Datos actualizados con éxito', backgroundColor: Colors.green);
       } else {
@@ -78,7 +81,6 @@ class UserController extends GetxController {
     }
   }
 
-  //CORREO DE RECUPERACION DE CONTRASEÑA
   Future<void> recuperarContrasena(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);

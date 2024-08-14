@@ -1,3 +1,4 @@
+
 import 'package:educode/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -22,9 +23,11 @@ class Auth {
             email: email, 
             password: password
           );
-          if(_firebaseAuth.currentUser != null){
+          if(_firebaseAuth.currentUser != null && _firebaseAuth.currentUser?.displayName != null){
             getUser.user.value = currentUser;
             Get.offAllNamed('/home');
+          }else{
+            print("NO PODRA ENTRARA");
           }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
@@ -39,18 +42,20 @@ class Auth {
     required String email,
     required String password,
     required String nombre,
-    required String lastName
+    required String lastName,
+    required String image,
   }) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, 
         password: password,
       );
+      print("IMAGEN QUE SUPUESTAMENTE SE GUARDA ${image}", );
      await _firebaseAuth.currentUser!.updateProfile(
-      displayName:"${nombre} ${lastName}", photoURL: "" );
+      displayName:"${nombre} ${lastName}", photoURL: image, );
       
       // Enviar correo de verificación después de crear el usuario
-      await sendEmailVerification();
+      // await sendEmailVerification();
     } on FirebaseAuthException catch (e) {
       print("Error: ${e.message}");
     }
@@ -73,7 +78,6 @@ class Auth {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        // User canceled the sign-in
         return;
       }
       
@@ -83,7 +87,7 @@ class Auth {
         idToken: googleAuth.idToken,
       );
       
-      // Sign in to Firebase with the obtained credentials
+      // Se inicia sesion con las credenciales
       UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
 
       if (userCredential.user != null) {

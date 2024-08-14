@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  final UserController getUser = Get.find<UserController>();
+
+  const HomePage({super.key, required this.getUser});
+  final UserController getUser;
 
   @override
   Widget build(BuildContext context) {
-    final screenP = ScreenProperty(context: context);
+    final screenP = ScreenProperty(context: context); // Asegúrate de que esta clase esté bien definida
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF3A1C71),
-        automaticallyImplyLeading: false, // Oculta la flecha de retroceso
+        automaticallyImplyLeading: false,
         toolbarHeight: screenP.altura * 0.25,
-        flexibleSpace: Container(
+        flexibleSpace: Obx(() => Container(
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
@@ -28,7 +31,7 @@ class HomePage extends StatelessWidget {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 50, color: Colors.grey),
+                  backgroundImage: NetworkImage(getUser.user.value?.photoURL ?? ""),
                 ),
                 SizedBox(width: 16),
                 Expanded(
@@ -45,13 +48,11 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 4),
-                      Flexible(
-                        child: Text(
-                          "${getUser.user.value!.displayName}",
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.white,
-                          ),
+                      Text(
+                        "${getUser.user.value?.displayName ?? 'Nombre no disponible'}",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -60,9 +61,9 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-        ),
+        )),
       ),
-      body: Container(
+    body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF5F2C82), Color(0xFF49A09D)],
