@@ -5,23 +5,18 @@ import 'package:educode/interfaces/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-
 class MultijugadorPage extends StatelessWidget {
   final UserController getUser = Get.find<UserController>();
-   final _navigation = <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-      ];
-
- 
+  final _navigation = <BottomNavigationBarItem>[
+    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+    BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-
-     final List<Widget> widgetOptions = <Widget>[
-    HomeMultiPage(getUser: getUser),
-    ProfilePage(),
+    final List<Widget> widgetOptions = <Widget>[
+      HomeMultiPage(getUser: getUser),
+      ProfilePage(),
     ];
 
     return Scaffold(
@@ -30,16 +25,14 @@ class MultijugadorPage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBarCustom(
         indexs: getUser.selectedIndexMulti,
-        itemsBar: _navigation, 
+        itemsBar: _navigation,
+        onTap: (int) {},
       ),
-       body: Obx(() {
-          return Center(
-            child: widgetOptions.elementAt(getUser.selectedIndexMulti.value),
-          );
-        }),
+      body: Obx(() {
+        return Center(
+          child: widgetOptions.elementAt(getUser.selectedIndexMulti.value),
+        );
+      }),
     );
   }
 }
-
-
-
