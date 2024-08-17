@@ -39,12 +39,7 @@ flutter:
     - lib/assets/coding.png
     - lib/assets/contra.png
     - lib/assets/fondo.jpg
-    - lib/assets/avatars/avatarF1.jpg
-    - lib/assets/avatars/avatarF2.png
-    - lib/assets/avatars/avatarF3.jpg
-    - lib/assets/avatars/avatarM1.png
-    - lib/assets/avatars/avatarM2.png
-    - lib/assets/avatars/avatarM3.jpg
+    
   # Uncomment and add your custom fonts here if needed
   # fonts:
   #   - family: Schyler

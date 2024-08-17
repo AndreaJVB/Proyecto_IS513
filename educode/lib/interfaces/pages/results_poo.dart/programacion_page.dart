@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/interfaces/pages/home/home_page.dart';
 import 'results_programacion.dart';
 
 class ProgramacionController extends GetxController {
@@ -99,15 +101,27 @@ class ProgramacionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProgramacionController controller = Get.put(ProgramacionController());
+    final UserController userController = Get.put(UserController());
 
     return Scaffold(
       backgroundColor: Colors.grey[500],
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[700],
-        title: Text(
-          'Programación',
-          style: TextStyle(color: Colors.black),
-          textAlign: TextAlign.center, // Centrar el título
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Programación',
+              style: TextStyle(color: Colors.black),
+            ),
+            SizedBox(width: 10),
+            Obx(() {
+              return Text(
+                '${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              );
+            }),
+          ],
         ),
       ),
       body: Obx(() {
@@ -168,6 +182,25 @@ class ProgramacionPage extends StatelessWidget {
                 'Tiempo restante: ${controller.timeLeft.value} segundos',
                 style: TextStyle(fontSize: 18, color: Colors.black),
                 textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Get.offAll(() => HomePage(
+                      getUser:
+                          userController)); // Regresa a HomePage con el UserController
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Volver a Home',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
               ),
             ],
           ),

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-
   const HomePage({super.key, required this.getUser});
   final UserController getUser;
 
   @override
   Widget build(BuildContext context) {
-    final screenP = ScreenProperty(context: context); // Asegúrate de que esta clase esté bien definida
+    final screenP = ScreenProperty(
+        context: context); // Asegúrate de que esta clase esté bien definida
 
     return Scaffold(
       appBar: AppBar(
@@ -18,52 +18,53 @@ class HomePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: screenP.altura * 0.25,
         flexibleSpace: Obx(() => Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage("lib/assets/fondo.jpg"),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage(getUser.user.value?.photoURL ?? ""),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage("lib/assets/fondo.jpg"),
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Hola,",
-                        style: TextStyle(
-                          fontSize: 26,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      backgroundImage:
+                          NetworkImage(getUser.user.value?.photoURL ?? ""),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Hola,",
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            "${getUser.user.value?.displayName ?? 'Nombre no disponible'}",
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        "${getUser.user.value?.displayName ?? 'Nombre no disponible'}",
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        )),
+              ),
+            )),
       ),
-    body: Container(
+      body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF5F2C82), Color(0xFF49A09D)],
@@ -105,7 +106,7 @@ class HomePage extends StatelessWidget {
                 ),
                 CategoriaBoton(
                     nombre: '/lenguaje_programacion',
-                    icono: Icons.language,
+                    icono: Icons.flutter_dash,
                     texto: 'Lenguaje de Programación')
               ],
             ),
