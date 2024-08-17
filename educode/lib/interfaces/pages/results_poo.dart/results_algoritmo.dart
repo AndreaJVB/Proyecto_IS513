@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ResultsAlgoritmo extends StatelessWidget {
   final int score;
@@ -7,8 +9,28 @@ class ResultsAlgoritmo extends StatelessWidget {
 
   ResultsAlgoritmo({required this.score, required this.total});
 
+  Future<void> _saveResult() async {
+    final prefs = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+    final formattedDate = now.toIso8601String();
+
+    final result = {
+      'userName': 'User', // Cambia esto según el nombre del usuario
+      'topic': 'Algoritmo',
+      'score': score,
+      'dateTime': formattedDate,
+    };
+
+    List<String> history = prefs.getStringList('history') ?? [];
+    history.add(json.encode(result));
+    await prefs.setStringList('history', history);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Guardar el resultado cuando la pantalla se construya
+    _saveResult();
+
     return Scaffold(
       backgroundColor: Colors.indigoAccent[100], // Fondo indigoAccent[100]
       body: Center(

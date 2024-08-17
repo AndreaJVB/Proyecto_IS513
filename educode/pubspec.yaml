@@ -26,6 +26,8 @@ dependencies:
   http: ^1.2.2
   get_storage: ^2.1.1
   google_sign_in: ^6.2.1
+  shared_preferences: ^2.1.0
+  intl: ^0.18.0
   
 
 dev_dependencies:
@@ -39,7 +41,10 @@ flutter:
     - lib/assets/coding.png
     - lib/assets/contra.png
     - lib/assets/fondo.jpg
+<<<<<<< HEAD
     
+=======
+>>>>>>> 5d8f63831a53c54e1d0262946a3c5e3bb6b93e64
   # Uncomment and add your custom fonts here if needed
   # fonts:
   #   - family: Schyler
