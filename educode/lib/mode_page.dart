@@ -1,11 +1,10 @@
 
-import 'package:educode/controllers/user_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ModePage extends StatelessWidget {
   ModePage({super.key});
-  final  getUser = Get.put<UserController>(UserController());
   
 
   @override

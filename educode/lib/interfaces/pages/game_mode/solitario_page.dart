@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:educode/controllers/user_controller.dart';
@@ -11,7 +12,7 @@ class SolitarioPage extends StatelessWidget {
     BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historial'),
     BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
   ];
-  final UserController getUser = Get.find<UserController>();
+  final UserController getUser = Get.put<UserController>(UserController());
 
   
 
