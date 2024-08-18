@@ -1,107 +1,20 @@
+import 'package:educode/controllers/quizz_controller.dart';
 import 'package:educode/interfaces/pages/results_poo.dart/widgets/boton_volver.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
 import 'package:get/get.dart';
 import 'package:educode/controllers/user_controller.dart';
-import 'package:educode/interfaces/pages/home/home_page.dart';
-import 'results_programacion.dart';
-
-class ProgramacionController extends GetxController {
-  var questions = <dynamic>[].obs;
-  var currentQuestionIndex = 0.obs;
-  var score = 0.obs;
-  var timeLeft = 30.obs;
-  var selectedOption = ''.obs;
-  Timer? _timer;
-
-  @override
-  void onInit() {
-    super.onInit();
-    _loadQuestions();
-  }
-
-  Future<void> _loadQuestions() async {
-    final url =
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json';
-
-    try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        questions.assignAll(data['programacion']);
-        questions.shuffle(); // Aleatorizar las preguntas
-        _startTimer();
-      } else {
-        throw Exception('Error al cargar preguntas');
-      }
-    } catch (error) {
-      print('Error cargando preguntas: $error');
-    }
-  }
-
-  void _startTimer() {
-    timeLeft.value = 30;
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      if (timeLeft.value > 0) {
-        timeLeft.value--;
-      } else {
-        _timer?.cancel();
-        _timeOut(); // Manejar el tiempo agotado
-      }
-    });
-  }
-
-  void _answerQuestion(String selectedOption) {
-    if (this.selectedOption.isEmpty) {
-      _timer?.cancel();
-      if (selectedOption ==
-          questions[currentQuestionIndex.value]['respuesta_marcada']) {
-        score++;
-      }
-      this.selectedOption.value = selectedOption;
-
-      // Esperar un segundo antes de pasar a la siguiente pregunta o mostrar resultados
-      Future.delayed(Duration(seconds: 1), () {
-        if (currentQuestionIndex.value < questions.length - 1) {
-          _nextQuestion();
-        } else {
-          Get.to(() =>
-              ResultsProgramacion(score: score.value, total: questions.length));
-        }
-      });
-    }
-  }
-
-  void _timeOut() {
-    if (selectedOption.isEmpty) {
-      if (currentQuestionIndex.value < questions.length - 1) {
-        _nextQuestion();
-      } else {
-        Get.to(() =>
-            ResultsProgramacion(score: score.value, total: questions.length));
-      }
-    }
-  }
-
-  void _nextQuestion() {
-    currentQuestionIndex.value++;
-    selectedOption.value = '';
-    _startTimer();
-  }
-
-  @override
-  void onClose() {
-    _timer?.cancel();
-    super.onClose();
-  }
-}
 
 class ProgramacionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ProgramacionController controller = Get.put(ProgramacionController());
+    final url =
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json';
+
+    final QuizController controller = Get.put(QuizController(
+      url: url,
+      data1: 'programacion',
+      topic: 'Programación'
+    ));
     final UserController userController = Get.put(UserController());
 
     return Scaffold(
@@ -163,7 +76,7 @@ class ProgramacionPage extends StatelessWidget {
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
                     child: ElevatedButton(
-                      onPressed: () => controller._answerQuestion(entry.key),
+                      onPressed: () => controller.answerQuestion(entry.key),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         backgroundColor: color,

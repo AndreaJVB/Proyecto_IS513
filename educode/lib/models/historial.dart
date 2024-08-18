@@ -1,31 +1,27 @@
 class Historial {
-  final DateTime hFinal;
-  final DateTime hInicial;
+  
+  final String now;
   final int puntuacion;
-  final String tema;
-  final String uidUsuario;
+  final String topic;
 
   Historial(
     {
-      required this.hFinal,
-      required this.hInicial,
+      required this.now,
       required this.puntuacion,
-      required this.tema,
-      required this.uidUsuario
+      required this.topic,
     }
   );
 
   factory Historial.fromJson(Map<String, dynamic> json) => Historial(
-    hFinal: json['final'], 
-    hInicial: json['inicio'], 
+ 
+    now: json['inicio'], 
     puntuacion: json['puntuacion'], 
-    tema: json['tema'], 
-    uidUsuario: json['uid_usuario']);
+    topic: json['tema'],);
 
   Map<String, dynamic> toJson() => {
-    "final": hFinal,
-    "inicio": hInicial,
+    
+    "inicio": now,
     "puntuacion": puntuacion,
-    "uid_usuario": uidUsuario
+    "tema": topic
   };
 }

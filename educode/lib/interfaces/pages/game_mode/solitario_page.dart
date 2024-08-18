@@ -14,8 +14,6 @@ class SolitarioPage extends StatelessWidget {
   ];
   final UserController getUser = Get.put<UserController>(UserController());
 
-  
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[

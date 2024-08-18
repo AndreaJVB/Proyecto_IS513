@@ -69,13 +69,6 @@ class Auth {
       final userDocRef = usuarioRef.doc(userCredential.user!.uid);
       await userDocRef.set(data.toJson());
 
-      // Crear la subcolección 'historial'
-      final historialRef = userDocRef.collection('historial');
-      // Puedes agregar documentos en la subcolección 'historial' aquí si es necesario
-      await historialRef.add({
-        'created_at': FieldValue.serverTimestamp(),
-        'action': 'User created',
-      });
       
        // Enviar correo de verificación después de crear el usuario
       // await sendEmailVerification();

@@ -7,11 +7,12 @@ class BotonRegresarHome extends StatelessWidget {
     super.key,
     required this.userController,
   });
-
+  
   final UserController userController;
 
   @override
   Widget build(BuildContext context) {
+    final UserController getUser = Get.put<UserController>(UserController());
     return ElevatedButton(
       onPressed: () {
         Get.offNamed('/solitario');// Regresa a HomePage con el UserController

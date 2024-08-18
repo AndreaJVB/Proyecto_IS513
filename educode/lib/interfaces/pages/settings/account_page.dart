@@ -151,7 +151,7 @@ class ProfilePage extends StatelessWidget {
                   title: Text('Cambiar modo de juego'),
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
                   onTap: () {
-                    // Navigate to settings
+                    Get.offAllNamed('/home');
                   },
                 ),
               ),

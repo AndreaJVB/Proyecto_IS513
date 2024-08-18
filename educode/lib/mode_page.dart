@@ -1,14 +1,17 @@
 
-
+import 'package:educode/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ModePage extends StatelessWidget {
   ModePage({super.key});
+  final UserController getUser = Get.put<UserController>(UserController());
   
 
   @override
   Widget build(BuildContext context) {
+    getUser.selectedIndex.value =0;
+   
     TextStyle texto = TextStyle(fontWeight: FontWeight.bold, fontFamily: "Times New Romas");
     return Scaffold(
       body: Container(
@@ -83,7 +86,7 @@ class ButtonCustom extends StatelessWidget {
             Colors.blue.withOpacity(0.1), // Efecto de presión
           ),
         ),
-        onPressed: () => Get.toNamed(ruta),
+        onPressed: () => Get.offAllNamed(ruta),
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Column(

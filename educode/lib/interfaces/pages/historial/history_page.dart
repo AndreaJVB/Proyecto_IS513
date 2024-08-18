@@ -1,27 +1,28 @@
+import 'package:educode/controllers/historial_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class HistorialPage extends StatelessWidget {
-  Future<List<Map<String, dynamic>>> _loadHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    final historyJson = prefs.getStringList('history') ?? [];
+  final HistorialController _historialController = HistorialController();
 
-    List<Map<String, dynamic>> historyList = historyJson
-        .map((item) => json.decode(item) as Map<String, dynamic>)
-        .toList();
+  Future<List<Map<String, dynamic>>> _loadHistory(User? currentUser) async {
+    if (currentUser == null) return [];
 
-    return historyList;
+    final historySnapshot = await _historialController.getHistorial(currentUser);
+    return historySnapshot;
   }
 
   @override
   Widget build(BuildContext context) {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Historial de Resultados'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _loadHistory(),
+        future: _loadHistory(currentUser),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -43,13 +44,12 @@ class HistorialPage extends StatelessWidget {
                     return ListTile(
                       title: Row(
                         children: [
-                          Text('Puntaje: ${result['score']}'),
+                          Text('Puntaje: ${result['puntuacion']}'),
                           SizedBox(width: 8),
-                          _buildStarRating(result['score'],
-                              20), // Asumiendo un total de 20 puntos
+                          _buildStarRating(result['puntuacion'], 20), // Asumiendo un total de 20 puntos
                         ],
                       ),
-                      subtitle: Text(_formatDateTime(result['dateTime'])),
+                      subtitle: Text(_formatDateTime(result['inicio'])),
                     );
                   }).toList(),
                 );
@@ -61,11 +61,10 @@ class HistorialPage extends StatelessWidget {
     );
   }
 
-  Map<String, List<Map<String, dynamic>>> _groupByTopic(
-      List<Map<String, dynamic>> history) {
+  Map<String, List<Map<String, dynamic>>> _groupByTopic(List<Map<String, dynamic>> history) {
     Map<String, List<Map<String, dynamic>>> grouped = {};
     for (var item in history) {
-      final topic = item['topic'] ?? 'Desconocido';
+      final topic = item['tema'] ?? 'Desconocido';
       if (!grouped.containsKey(topic)) {
         grouped[topic] = [];
       }
@@ -75,8 +74,7 @@ class HistorialPage extends StatelessWidget {
   }
 
   Widget _buildStarRating(int score, int total) {
-    int starCount = ((score / total) * 5)
-        .round(); // Calcula cuántas estrellas (de 5) merece el puntaje
+    int starCount = ((score / total) * 5).round();
     return Row(
       children: List.generate(5, (index) {
         return Icon(
