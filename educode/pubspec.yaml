@@ -42,6 +42,10 @@ flutter:
     - lib/assets/coding.png
     - lib/assets/contra.png
     - lib/assets/fondo.jpg
+<<<<<<< HEAD
+    
+=======
+>>>>>>> 5d8f63831a53c54e1d0262946a3c5e3bb6b93e64
   # Uncomment and add your custom fonts here if needed
   # fonts:
   #   - family: Schyler

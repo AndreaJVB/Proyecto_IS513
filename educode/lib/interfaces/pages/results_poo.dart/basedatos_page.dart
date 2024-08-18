@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/interfaces/pages/home/home_page.dart';
 import 'results_basedatos.dart';
 
 class QuizController extends GetxController {
@@ -100,18 +102,26 @@ class BasedatosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final QuizController controller = Get.put(QuizController());
+    final UserController userController = Get.find<UserController>();
 
     return Scaffold(
       backgroundColor:
           Colors.grey[500], // Fondo oscuro de la pantalla principal
       appBar: AppBar(
         backgroundColor:
-            Colors.deepPurple[700], // Fondo de la AppBar en color amarillo
-        title: Text(
-          'Base de Datos', // Título estático
-          style: TextStyle(color: Colors.black), // Texto del título en negro
-          textAlign: TextAlign.center, // Centrando el título
-        ),
+            Colors.deepPurple[700], // Fondo de la AppBar en color morado oscuro
+        title: Obx(() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          );
+        }),
+        automaticallyImplyLeading: false, // Elimina el botón de regreso
       ),
       body: Obx(() {
         if (controller.questions.isEmpty) {
@@ -136,8 +146,7 @@ class BasedatosPage extends StatelessWidget {
                 ),
                 child: Text(
                   question['pregunta'],
-                  style: TextStyle(
-                      fontSize: 20), // Tamaño de la letra de la pregunta
+                  style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -155,18 +164,14 @@ class BasedatosPage extends StatelessWidget {
                     onPressed: () => controller._answerQuestion(entry.key),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor:
-                          color, // Fondo verde o rojo si está seleccionada, blanco si no lo está
+                      backgroundColor: color,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: Text(
                       entry.value,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors
-                              .black), // Tamaño de la letra de las opciones
+                      style: TextStyle(fontSize: 20, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -180,6 +185,25 @@ class BasedatosPage extends StatelessWidget {
                   color: Colors.white, // Texto del temporizador en blanco
                 ),
                 textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Get.offAll(() => HomePage(
+                      getUser:
+                          userController)); // Regresa a HomePage con el UserController
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Volver a Home',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
               ),
             ],
           ),
