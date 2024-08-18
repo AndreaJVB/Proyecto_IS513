@@ -1,10 +1,10 @@
+import 'package:educode/interfaces/pages/results_poo.dart/widgets/boton_volver.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:educode/controllers/user_controller.dart';
-import 'package:educode/interfaces/pages/home/home_page.dart';
 import 'results_basedatos.dart';
 
 class QuizController extends GetxController {
@@ -105,11 +105,9 @@ class BasedatosPage extends StatelessWidget {
     final UserController userController = Get.find<UserController>();
 
     return Scaffold(
-      backgroundColor:
-          Colors.grey[500], // Fondo oscuro de la pantalla principal
+      backgroundColor: Colors.grey[500], // Fondo oscuro de la pantalla principal
       appBar: AppBar(
-        backgroundColor:
-            Colors.deepPurple[700], // Fondo de la AppBar en color morado oscuro
+        backgroundColor: Colors.deepPurple[700], // Fondo de la AppBar en color morado oscuro
         title: Obx(() {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -128,84 +126,67 @@ class BasedatosPage extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
 
-        final question =
-            controller.questions[controller.currentQuestionIndex.value];
+        final question = controller.questions[controller.currentQuestionIndex.value];
         final options = question['opciones'] as Map<String, dynamic>;
 
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color:
-                      Colors.white, // Fondo blanco para la caja de la pregunta
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  question['pregunta'],
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: 20),
-              ...options.entries.map((entry) {
-                final isSelected = controller.selectedOption.value == entry.key;
-                final isCorrect = entry.key == question['respuesta_marcada'];
-                final color = isSelected
-                    ? (isCorrect ? Colors.green : Colors.red)
-                    : Colors.white;
-
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  child: ElevatedButton(
-                    onPressed: () => controller._answerQuestion(entry.key),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: color,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      entry.value,
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              }).toList(),
-              SizedBox(height: 20),
-              Text(
-                'Tiempo restante: ${controller.timeLeft.value} segundos',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white, // Texto del temporizador en blanco
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Get.offAll(() => HomePage(
-                      getUser:
-                          userController)); // Regresa a HomePage con el UserController
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
+        return SingleChildScrollView( // Añadido para permitir scroll
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Fondo blanco para la caja de la pregunta
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  child: Text(
+                    question['pregunta'],
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                child: Text(
-                  'Volver a Home',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                SizedBox(height: 20),
+                ...options.entries.map((entry) {
+                  final isSelected = controller.selectedOption.value == entry.key;
+                  final isCorrect = entry.key == question['respuesta_marcada'];
+                  final color = isSelected
+                      ? (isCorrect ? Colors.green : Colors.red)
+                      : Colors.white;
+
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ElevatedButton(
+                      onPressed: () => controller._answerQuestion(entry.key),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        entry.value,
+                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                SizedBox(height: 20),
+                Text(
+                  'Tiempo restante: ${controller.timeLeft.value} segundos',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white, // Texto del temporizador en blanco
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                SizedBox(height: 20),
+                BotonRegresarHome(userController: userController),
+              ],
+            ),
           ),
         );
       }),

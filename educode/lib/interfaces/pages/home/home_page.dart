@@ -131,7 +131,7 @@ class CategoriaBoton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: ElevatedButton(
-        onPressed: () => Get.toNamed(nombre),
+        onPressed: () => Get.offAllNamed(nombre),
         style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xFF3A6073),
           shape: RoundedRectangleBorder(
