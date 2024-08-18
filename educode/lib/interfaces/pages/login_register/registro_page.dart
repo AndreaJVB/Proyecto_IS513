@@ -1,5 +1,4 @@
 import 'package:educode/controllers/auth.dart';
-import 'package:educode/controllers/avatar_controller.dart';
 import 'package:educode/controllers/validaciones.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/icono_cerrar.dart';
 import 'package:educode/interfaces/widgets/circle_avatar.dart';
