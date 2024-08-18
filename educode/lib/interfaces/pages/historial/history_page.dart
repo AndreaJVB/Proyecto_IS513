@@ -99,9 +99,7 @@ class HistorialPage extends StatelessWidget {
     switch (topic) {
       case 'Base de Datos':
         return Icon(Icons.storage, color: Colors.blue);
-      case 'Programación 1':
-        return Icon(Icons.code, color: Colors.green);
-      case 'Programación 2':
+      case 'Programación':
         return Icon(Icons.computer, color: Colors.red);
       case 'Algoritmos':
         return Icon(Icons.functions, color: Colors.orange);

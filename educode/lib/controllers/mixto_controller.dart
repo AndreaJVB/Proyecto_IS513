@@ -1,23 +1,21 @@
 import 'package:educode/interfaces/pages/results_poo.dart/results_basedatos.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'package:get/get.dart';
 
+class MixtoController extends GetxController {
+  MixtoController({required this.map});
 
-class QuizController extends GetxController {
+  final Map<String, List<String>> map;
 
-  QuizController({required this.url, required this.data1, required this.topic});
-
-  final String url;
-  final String data1;
-  final String topic;
-
+  var tema = ''.obs;
   var questions = <dynamic>[].obs;
   var currentQuestionIndex = 0.obs;
   var score = 0.obs;
   var timeLeft = 30.obs;
   var selectedOption = ''.obs;
+  var isLoading = true.obs; // Estado de carga
   Timer? timer;
 
   @override
@@ -27,17 +25,30 @@ class QuizController extends GetxController {
   }
 
   Future<void> loadQuestions() async {
-    
     try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        questions.assignAll(data[data1]);
-        questions.shuffle(); // Aleatorizar el orden de las preguntas
-        _startTimer();
-      } else {
-        throw Exception('Error al cargar preguntas');
+      for (var entry in map.entries) {
+        final response = await http.get(Uri.parse(entry.value[0]));
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          for (var question in data[entry.value[1]]) {
+            question['tema'] = entry.key; // Asigna el tema a cada pregunta
+            questions.add(question);
+          }
+        } else {
+          throw Exception('Error al cargar preguntas');
+        }
       }
+
+      questions.shuffle();
+      if (questions.length > 20) {
+        questions = questions.sublist(0, 20).obs; // Selecciona 20 preguntas al azar
+      }
+
+      if (questions.isNotEmpty) {
+        tema.value = questions[currentQuestionIndex.value]['tema'];
+      }
+      isLoading.value = false; // Marca como cargado
+      _startTimer();
     } catch (error) {
       print('Error cargando preguntas: $error');
     }
@@ -50,7 +61,7 @@ class QuizController extends GetxController {
         timeLeft.value--;
       } else {
         timer.cancel();
-        timeOut(); // Si se acaba el tiempo sin seleccionar ninguna opción
+        timeOut();
       }
     });
   }
@@ -58,32 +69,27 @@ class QuizController extends GetxController {
   void answerQuestion(String selectedOption) {
     if (this.selectedOption.isEmpty) {
       timer?.cancel();
-      if (selectedOption ==
-          questions[currentQuestionIndex.value]['respuesta_marcada']) {
+      if (selectedOption == questions[currentQuestionIndex.value]['respuesta_marcada']) {
         score++;
       }
       this.selectedOption.value = selectedOption;
 
-      // Esperar un segundo antes de pasar a la siguiente pregunta o mostrar resultados
       Future.delayed(Duration(seconds: 1), () {
         if (currentQuestionIndex.value < questions.length - 1) {
           _nextQuestion();
         } else {
-          Get.to(() =>
-              ResultsBasedatos(score: score.value, total: questions.length, topic: topic,));
+          Get.to(() => ResultsBasedatos(score: score.value, total: questions.length, topic: 'Mixto'));
         }
       });
     }
   }
 
   void timeOut() {
-    // Si el tiempo se acaba y no se ha seleccionado opción, avanza como incorrecta
     if (selectedOption.isEmpty) {
       if (currentQuestionIndex.value < questions.length - 1) {
         _nextQuestion();
       } else {
-        Get.to(() =>
-            ResultsBasedatos(score: score.value, total: questions.length, topic: topic,));
+        Get.to(() => ResultsBasedatos(score: score.value, total: questions.length, topic: 'Mixto'));
       }
     }
   }
@@ -91,6 +97,7 @@ class QuizController extends GetxController {
   void _nextQuestion() {
     currentQuestionIndex.value++;
     selectedOption.value = '';
+    tema.value = questions[currentQuestionIndex.value]['tema']; // Actualiza el tema para la siguiente pregunta
     _startTimer();
   }
 

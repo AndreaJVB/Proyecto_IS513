@@ -1,5 +1,9 @@
 import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/interfaces/pages/home/widgets/boton_categoria_mixta.dart';
+import 'package:educode/interfaces/pages/home/widgets/botones_categoria.dart';
+import 'package:educode/interfaces/pages/home/widgets/escoger_categoria.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
+import 'package:educode/interfaces/pages/results_poo.dart/mixto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -102,49 +106,22 @@ class HomePage extends StatelessWidget {
                             texto: 'Algoritmo')
                       ],
                     ),
-                  ],
-                ),
-                CategoriaBoton(
+                    TableRow(
+                      children: [
+                        CategoriaBoton(
                     nombre: '/lenguaje_programacion',
                     icono: Icons.flutter_dash,
-                    texto: 'Lenguaje de Programación')
+                    texto: 'Lenguaje de Programación'),
+                
+                    BotonCategoriaMixta()
+                      ]
+                    )
+                  ],
+                ),
+                
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CategoriaBoton extends StatelessWidget {
-  const CategoriaBoton(
-      {super.key,
-      required this.nombre,
-      required this.icono,
-      required this.texto});
-  final String nombre;
-  final IconData icono;
-  final String texto;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: ElevatedButton(
-        onPressed: () => Get.offAllNamed(nombre),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF3A6073),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        ),
-        child: Column(
-          children: [
-            Icon(icono, size: 40, color: Colors.white),
-            SizedBox(height: 10),
-            Text(texto, style: TextStyle(fontSize: 16, color: Colors.white)),
-          ],
         ),
       ),
     );
