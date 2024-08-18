@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Asegúrate de importar GetX para usar Get.to()
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; // Importar para codificar JSON
 
 class ResultsProgramacion extends StatelessWidget {
   final int score;
   final int total;
 
   ResultsProgramacion({required this.score, required this.total});
+
+  Future<void> _saveResult() async {
+    final prefs = await SharedPreferences.getInstance();
+    final historyJson = prefs.getStringList('history') ?? [];
+
+    final newResult = {
+      'topic': 'Programación',
+      'score': score,
+      'dateTime': DateTime.now().toIso8601String(),
+    };
+
+    historyJson.add(json.encode(newResult));
+    await prefs.setStringList('history', historyJson);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +53,8 @@ class ResultsProgramacion extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await _saveResult(); // Guardar el resultado antes de navegar
                 Get.offAllNamed(
                     '/solitario'); // Navegar a la pantalla principal
               },

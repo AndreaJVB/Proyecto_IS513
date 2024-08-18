@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // Asegúrate de importar GetX para usar Get.to()
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert'; // Importar para codificar JSON
+import 'package:intl/intl.dart'; // Asegúrate de que esto esté importado
 
-class ResultsPOO extends StatelessWidget {
+class ResultsPage extends StatelessWidget {
   final int score;
   final int total;
+  final DateTime dateTime; // Añade esta variable si necesitas mostrar la fecha
 
-  ResultsPOO({required this.score, required this.total});
-
-  Future<void> _saveResult() async {
-    final prefs = await SharedPreferences.getInstance();
-    final historyJson = prefs.getStringList('history') ?? [];
-
-    final newResult = {
-      'topic': 'Programación Orientada a Objetos',
-      'score': score,
-      'dateTime': DateTime.now().toIso8601String(),
-    };
-
-    historyJson.add(json.encode(newResult));
-    await prefs.setStringList('history', historyJson);
-  }
+  ResultsPage({
+    required this.score,
+    required this.total,
+    required this.dateTime,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+    final String formatted = formatter.format(dateTime); // Usa la variable
+
     return Scaffold(
       backgroundColor: Colors.blue[100], // Fondo azul claro
       body: Center(
@@ -35,7 +27,7 @@ class ResultsPOO extends StatelessWidget {
               padding: EdgeInsets.all(16),
               color: Colors.blue[100], // Fondo azul claro para el contenedor
               child: Text(
-                'Resultado de Programación Orientada a Objetos:',
+                'Resultado de Programación:',
                 style: TextStyle(
                   fontSize: 22, // Tamaño de letra 22
                   color: Colors.black, // Texto negro
@@ -52,11 +44,17 @@ class ResultsPOO extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
+            Text(
+              'Fecha y hora: $formatted', // Muestra la fecha formateada
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black, // Texto negro
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                await _saveResult(); // Guardar el resultado antes de navegar
-                Get.offAllNamed(
-                    '/solitario'); // Navegar a la pantalla principal
+              onPressed: () {
+                // Navegar al inicio
               },
               child: Text('Volver al Inicio'),
             ),

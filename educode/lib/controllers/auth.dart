@@ -1,5 +1,8 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educode/controllers/historial_controller.dart';
 import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/models/usuarios.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,6 +16,8 @@ class Auth {
   final getUser = Get.put<UserController>(UserController());
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+  //Referencia a la base de datos
+  final usuarioRef = FirebaseFirestore.instance.collection('usuarios');
 
   Future<void> signInWithEmailAndPassword({
     required String email,
@@ -44,17 +49,35 @@ class Auth {
     required String nombre,
     required String lastName,
     required String image,
-  }) async {
+    required String userName,
+  })  async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, 
         password: password,
       );
-      print("IMAGEN QUE SUPUESTAMENTE SE GUARDA ${image}", );
-     await _firebaseAuth.currentUser!.updateProfile(
-      displayName:"${nombre} ${lastName}", photoURL: image, );
+
+      await userCredential.user!.updateProfile(
+        displayName: "$nombre $lastName",
+        photoURL: image,
+      );
+
+      final data = Usuarios(
+        nombreUsuario: userName
+      );
+       // Crear el documento del usuario
+      final userDocRef = usuarioRef.doc(userCredential.user!.uid);
+      await userDocRef.set(data.toJson());
+
+      // Crear la subcolección 'historial'
+      final historialRef = userDocRef.collection('historial');
+      // Puedes agregar documentos en la subcolección 'historial' aquí si es necesario
+      await historialRef.add({
+        'created_at': FieldValue.serverTimestamp(),
+        'action': 'User created',
+      });
       
-      // Enviar correo de verificación después de crear el usuario
+       // Enviar correo de verificación después de crear el usuario
       // await sendEmailVerification();
     } on FirebaseAuthException catch (e) {
       print("Error: ${e.message}");
@@ -92,6 +115,7 @@ class Auth {
 
       if (userCredential.user != null) {
         getUser.user.value = userCredential.user;
+        HistorialController().CrearDocumento(currentUser: userCredential.user);
         Get.offAllNamed('/home');
       }
     } on FirebaseAuthException catch (e) {

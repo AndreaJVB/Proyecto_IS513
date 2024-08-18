@@ -130,6 +130,7 @@ class RegistroPage extends StatelessWidget {
                                     email: correoController.text,
                                     password: passwordController.text,
                                     image: avatar.avatar.avatar.value,
+                                    userName: usuarioController.text,
                                   ).then((_){
                                     avatar.avatar.avatar.value = ''; 
                                   });
