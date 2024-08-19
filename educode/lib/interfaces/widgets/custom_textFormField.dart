@@ -23,18 +23,20 @@ class TextFormCustom extends StatelessWidget {
   final int? maxLength;
   final String? hintText;
   final IconData? prefixIcon;
-  final Icon? suffixIcon;
+  final Widget? suffixIcon;
   Color? fillColor = const Color.fromARGB(200, 255, 255, 255) ;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      
       controller: controller,
       validator: validator,
       keyboardType: keyboardType,
       obscureText: obscureText,
       maxLength: maxLength,
       decoration: InputDecoration(
+        // icon: IconButton(icon: Icon(Icons.remove_red_eye), onPressed: (){},),
         labelStyle: const TextStyle(fontWeight: FontWeight.w600),
         hintStyle: const TextStyle(fontWeight: FontWeight.w600),
         counterStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),

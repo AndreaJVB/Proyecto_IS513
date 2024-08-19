@@ -62,13 +62,12 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> actualizarDatos(String email, String nombre, String image) async {
+  Future<void> actualizarDatos(String nombre, String image) async {
     try {
       final currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser != null) {
         await currentUser.updateProfile(displayName: nombre);
-        await currentUser.verifyBeforeUpdateEmail(email);
         await currentUser.updatePhotoURL(image);
         await updateUserData(); // Actualizar datos del usuario
         
