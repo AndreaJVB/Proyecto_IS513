@@ -11,7 +11,6 @@ class HomeMultiPage extends StatelessWidget {
 
   final UserController getUser;
   final controller = Get.put<MultijugadorController>(MultijugadorController());
-  
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +31,16 @@ class HomeMultiPage extends StatelessWidget {
                 return null;
               },
             ),
-            Obx(() => DropdownButton<String>(
+            Obx(() => DropdownButton<IconData>(
                   value: controller.avatarPlayer1.value,
-                  onChanged: (String? newValue) {
+                  onChanged: (IconData? newValue) {
                     controller.avatarPlayer1.value = newValue!;
                   },
                   items: controller.avatars
-                      .map<DropdownMenuItem<String>>(
-                          (String value) => DropdownMenuItem<String>(
+                      .map<DropdownMenuItem<IconData>>(
+                          (IconData value) => DropdownMenuItem<IconData>(
                                 value: value,
-                                child: Text(value),
+                                child: Icon(value),
                               ))
                       .toList(),
                 )),
@@ -55,22 +54,31 @@ class HomeMultiPage extends StatelessWidget {
                 return null;
               },
             ),
-            Obx(() => DropdownButton<String>(
+            Obx(() => DropdownButton<IconData>(
                   value: controller.avatarPlayer2.value,
-                  onChanged: (String? newValue) {
+                  onChanged: (IconData? newValue) {
                     controller.avatarPlayer2.value = newValue!;
                   },
                   items: controller.avatars
-                      .map<DropdownMenuItem<String>>(
-                          (String value) => DropdownMenuItem<String>(
+                      .map<DropdownMenuItem<IconData>>(
+                          (IconData value) => DropdownMenuItem<IconData>(
                                 value: value,
-                                child: Text(value),
+                                child: Icon(value),
                               ))
                       .toList(),
                 )),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: controller.startGame,
+              onPressed: () {
+                if (controller.formKey.currentState!.validate()) {
+                  Get.to(() => WheelPage(
+                        player1Name: controller.player1Controller.text,
+                        player1Icon: controller.avatarPlayer1.value,
+                        player2Name: controller.player2Controller.text,
+                        player2Icon: controller.avatarPlayer2.value,
+                      ));
+                }
+              },
               child: Text('Comenzar Juego'),
             ),
           ],
@@ -83,16 +91,20 @@ class HomeMultiPage extends StatelessWidget {
 class MultijugadorController extends GetxController {
   final player1Controller = TextEditingController();
   final player2Controller = TextEditingController();
-  var avatarPlayer1 = 'Avatar1'.obs;
-  var avatarPlayer2 = 'Avatar2'.obs;
-  final List<String> avatars = ['Avatar1', 'Avatar2', 'Avatar3'];
-  final UserController getUser = Get.find<UserController>();
 
-  void startGame() {
-    if (Get.find<MultijugadorController>().formKey.currentState!.validate()) {
-      Get.to(() => WheelPage());
-    }
-  }
+  final List<IconData> avatars = [
+    Icons.person,
+    Icons.person_outline,
+    Icons.person_pin,
+    Icons.person_add,
+    Icons.face,
+    Icons.tag_faces
+  ];
+
+  var avatarPlayer1 = Icons.person.obs;
+  var avatarPlayer2 = Icons.face.obs;
+
+  final UserController getUser = Get.find<UserController>();
 
   final formKey = GlobalKey<FormState>();
 }

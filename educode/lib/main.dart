@@ -14,6 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
+import 'package:educode/controllers/user_controller.dart';
+
+// Importa HomeMultiPage y WheelPage
+import 'package:educode/interfaces/pages/home/widgets/wheel_page.dart';
+import 'package:educode/interfaces/pages/home/home_page_multi.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,16 +46,25 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/multijugador', page: () => MultijugadorPage()),
         GetPage(name: '/basedatos', page: () => BasedatosPage()),
         GetPage(name: '/programacion', page: () => ProgramacionPage()),
-        GetPage(
-          name: '/poo',
-          page: () => POOPage(),
-        ),
+        GetPage(name: '/poo', page: () => POOPage()),
         GetPage(
             name: '/lenguaje_programacion',
             page: () => LenguajeProgramacionPage()),
         GetPage(name: '/algoritmo', page: () => AlgoritmoPage()),
         GetPage(name: '/password', page: () => ForgetPasswordPage()),
-       
+        // Rutas para HomeMultiPage y WheelPage
+        GetPage(
+            name: '/home_multi',
+            page: () => HomeMultiPage(getUser: Get.put(UserController()))),
+        GetPage(
+            name: '/wheel',
+            page: () => WheelPage(
+                  player1Name:
+                      'Jugador 1', // Valores predeterminados, puedes cambiar esto según tu lógica
+                  player1Icon: Icons.person,
+                  player2Name: 'Jugador 2',
+                  player2Icon: Icons.person_outline,
+                )),
       ],
     );
   }
