@@ -1,21 +1,17 @@
 import 'package:educode/controllers/quizz_controller.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/widgets/boton_volver.dart';
+import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/interfaces/pages/topic_pages/widgets/boton_volver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:educode/controllers/user_controller.dart';
 
-class POOPage extends StatelessWidget {
+class AlgoritmoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     final url =
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/Programacion%20Orienta%20a%20Objeto.json';
+    final url =
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/algoritmo.json';
 
-
-    final QuizController controller = Get.put(QuizController(
-      url: url,
-      data1: 'POO',
-      topic: 'Programación Orientada a Objetos',
-    ));
+    final QuizController controller = Get.put(
+        QuizController(url: url, data1: 'algoritmo', topic: 'Algoritmo'));
     final UserController userController = Get.put(UserController());
 
     return Scaffold(
@@ -24,25 +20,19 @@ class POOPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor:
             Colors.deepPurple[700], // Fondo de la AppBar en color morado oscuro
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'POO', // Título estático
-              style:
-                  TextStyle(color: Colors.black), // Texto del título en negro
-            ),
-            SizedBox(width: 10),
-            Obx(() {
-              return Text(
-                '${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16), // Texto del medidor de preguntas
-              );
-            }),
-          ],
-        ),
+        title: Obx(() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                style:
+                    TextStyle(color: Colors.black), // Texto del título en negro
+              ),
+            ],
+          );
+        }),
+        automaticallyImplyLeading: false, // Elimina el botón de regreso
       ),
       body: Obx(() {
         if (controller.questions.isEmpty) {
@@ -62,43 +52,42 @@ class POOPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color:
-                        Colors.white, // Fondo blanco para la caja de la pregunta
+                    color: Colors
+                        .white, // Fondo blanco para la caja de la pregunta
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     question['pregunta'],
-                    style: TextStyle(
-                        fontSize: 20), // Tamaño de la letra de la pregunta
+                    style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: 20),
                 ...options.entries.map((entry) {
-                  final isSelected = controller.selectedOption.value == entry.key;
+                  final isSelected =
+                      controller.selectedOption.value == entry.key;
                   final isCorrect = entry.key == question['respuesta_marcada'];
                   final color = isSelected
                       ? (isCorrect ? Colors.green : Colors.red)
                       : Colors.white;
-          
+
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
                     child: ElevatedButton(
-                      onPressed: () => controller.answerQuestion(entry.key),
+                      onPressed: () {
+                        controller.answerQuestion(entry.key);
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         backgroundColor:
-                            color, // Fondo verde o rojo si está seleccionada, blanco si no lo está
+                            color, // Cambia el fondo según la selección
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: Text(
                         entry.value,
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors
-                                .black), // Tamaño de la letra de las opciones
+                        style: TextStyle(fontSize: 20, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -109,12 +98,12 @@ class POOPage extends StatelessWidget {
                   'Tiempo restante: ${controller.timeLeft.value} segundos',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white, // Texto del temporizador en blanco
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 20),
-               BotonRegresarHome(userController: userController),
+                BotonRegresarHome(userController: userController),
               ],
             ),
           ),

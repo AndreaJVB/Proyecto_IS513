@@ -41,7 +41,14 @@ flutter:
   assets:
     - lib/assets/coding.png
     - lib/assets/contra.png
+    - lib/assets/programacion.png
+    - lib/assets/poo.png
+    - lib/assets/basedatos.png
+    - lib/assets/algoritmo.png
     - lib/assets/fondo.jpg
+    - lib/assets/flutter.png
+    - lib/assets/mixto.jpg
+    
     
   # Uncomment and add your custom fonts here if needed
   # fonts:

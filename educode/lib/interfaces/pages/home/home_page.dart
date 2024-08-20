@@ -3,7 +3,6 @@ import 'package:educode/interfaces/pages/home/widgets/boton_categoria_mixta.dart
 import 'package:educode/interfaces/pages/home/widgets/botones_categoria.dart';
 import 'package:educode/interfaces/pages/home/widgets/escoger_categoria.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/mixto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -85,43 +84,162 @@ class HomePage extends StatelessWidget {
                   children: [
                     TableRow(
                       children: [
-                        CategoriaBoton(
+                        CategoriaBotonConImagen(
                           nombre: "/basedatos",
-                          icono: Icons.storage,
+                          imagePath: 'lib/assets/basedatos.png',
                           texto: 'Base de Datos',
                         ),
-                        CategoriaBoton(
-                            nombre: '/programacion',
-                            icono: Icons.computer,
-                            texto: 'Programación'),
+                        CategoriaBotonConImagen(
+                          nombre: '/programacion',
+                          imagePath: 'lib/assets/programacion.png',
+                          texto: 'Programación',
+                        ),
                       ],
                     ),
                     TableRow(
                       children: [
-                        CategoriaBoton(
-                            nombre: '/poo', icono: Icons.code, texto: 'POO'),
-                        CategoriaBoton(
-                            nombre: '/algoritmo',
-                            icono: Icons.functions,
-                            texto: 'Algoritmo')
+                        CategoriaBotonConImagen(
+                          nombre: '/poo',
+                          imagePath: 'lib/assets/poo.png',
+                          texto: 'POO',
+                        ),
+                        CategoriaBotonConImagen(
+                          nombre: '/algoritmo',
+                          imagePath: 'lib/assets/algoritmo.png',
+                          texto: 'Algoritmo',
+                        ),
                       ],
                     ),
                     TableRow(
                       children: [
-                        CategoriaBoton(
-                    nombre: '/lenguaje_programacion',
-                    icono: Icons.flutter_dash,
-                    texto: 'Lenguaje de Programación'),
-                
-                    BotonCategoriaMixta()
-                      ]
-                    )
+                        CategoriaBotonConImagen(
+                          nombre: '/lenguaje_programacion',
+                          imagePath: 'lib/assets/flutter.png',
+                          texto: 'Lenguaje de Programación',
+                          textAlign: TextAlign.center,
+                        ),
+                        BotonCategoriaMixtaConImagen(
+                          imagePath: 'lib/assets/mixto.jpg',
+                          texto: 'Preguntas       Mixtas',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CategoriaBotonConImagen extends StatelessWidget {
+  final String nombre;
+  final String imagePath;
+  final String texto;
+  final TextAlign textAlign;
+
+  const CategoriaBotonConImagen({
+    required this.nombre,
+    required this.imagePath,
+    required this.texto,
+    this.textAlign = TextAlign.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(nombre);
+      },
+      child: Container(
+        margin: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 5),
+              blurRadius: 10.0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 50,
+              width: 50,
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              texto,
+              textAlign: textAlign,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BotonCategoriaMixtaConImagen extends StatelessWidget {
+  final String imagePath;
+  final String texto;
+  final TextAlign textAlign;
+
+  const BotonCategoriaMixtaConImagen({
+    required this.imagePath,
+    required this.texto,
+    this.textAlign = TextAlign.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        margin: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 5),
+              blurRadius: 10.0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 50,
+              width: 50,
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              texto,
+              textAlign: textAlign,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:educode/controllers/quizz_controller.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/widgets/boton_volver.dart';
+import 'package:educode/interfaces/pages/topic_pages/widgets/boton_volver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:educode/controllers/user_controller.dart';
@@ -10,11 +10,8 @@ class ProgramacionPage extends StatelessWidget {
     final url =
         'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json';
 
-    final QuizController controller = Get.put(QuizController(
-      url: url,
-      data1: 'programacion',
-      topic: 'Programación'
-    ));
+    final QuizController controller = Get.put(
+        QuizController(url: url, data1: 'programacion', topic: 'Programación'));
     final UserController userController = Get.put(UserController());
 
     return Scaffold(
@@ -67,12 +64,13 @@ class ProgramacionPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 ...options.entries.map((entry) {
-                  final isSelected = controller.selectedOption.value == entry.key;
+                  final isSelected =
+                      controller.selectedOption.value == entry.key;
                   final isCorrect = entry.key == question['respuesta_marcada'];
                   final color = isSelected
                       ? (isCorrect ? Colors.green : Colors.red)
                       : Colors.white;
-          
+
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
                     child: ElevatedButton(
