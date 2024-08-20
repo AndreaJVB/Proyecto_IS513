@@ -10,8 +10,8 @@ class BotonCategoriaMixta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
+    return GestureDetector(
+      onTap: () async {
         final Map<String, List<String>> map = {};
         final seleccionadas = await Get.dialog<List<String>>(
           EscogerCategoria(),
@@ -54,19 +54,39 @@ class BotonCategoriaMixta extends StatelessWidget {
           Get.offAll(MixtoPage(map: map));
         }
       },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF3A6073),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 5),
+              blurRadius: 10.0,
+            ),
+          ],
         ),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.library_books_outlined, size: 40, color: Colors.white),
-          SizedBox(height: 10),
-          Text('Mixto', style: TextStyle(fontSize: 16, color: Colors.white)),
-        ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'lib/assets/mixto.jpg',
+              height: 50,
+              width: 50,
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              'Preguntas Mixtas',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

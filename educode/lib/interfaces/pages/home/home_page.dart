@@ -143,11 +143,7 @@ class HomePage extends StatelessWidget {
                           texto: 'Lenguaje de Programación',
                           textAlign: TextAlign.center,
                         ),
-                        BotonCategoriaMixtaConImagen(
-                          imagePath: 'lib/assets/mixto.jpg',
-                          texto: 'Preguntas       Mixtas',
-                          textAlign: TextAlign.center,
-                        ),
+                        BotonCategoriaMixta(),
                       ],
                     ),
                   ],
@@ -178,7 +174,7 @@ class CategoriaBotonConImagen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(nombre);
+        Get.offAllNamed(nombre);
       },
       child: Container(
         margin: const EdgeInsets.all(8.0),
