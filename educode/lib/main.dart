@@ -1,7 +1,5 @@
 import 'package:educode/interfaces/pages/login_register/recuperar_contra.dart';
-
 import 'package:educode/interfaces/pages/topic_pages/mixto_page.dart';
-
 import 'package:educode/mode_page.dart';
 import 'package:educode/interfaces/pages/game_mode/multijugador_page.dart';
 import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
@@ -39,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => const Inicio()),
         GetPage(name: '/login', page: () => LoginPage()),
