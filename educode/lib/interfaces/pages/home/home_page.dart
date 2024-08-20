@@ -17,11 +17,11 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF3A1C71),
+        backgroundColor: const Color(0xFF3A1C71),
         automaticallyImplyLeading: false,
         toolbarHeight: screenP.altura * 0.25,
         flexibleSpace: Obx(() => Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage("lib/assets/fondo.jpg"),
@@ -37,13 +37,13 @@ class HomePage extends StatelessWidget {
                       backgroundImage:
                           NetworkImage(getUser.user.value?.photoURL ?? ""),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Hola,",
                             style: TextStyle(
                               fontSize: 26,
@@ -51,12 +51,14 @@ class HomePage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           FutureBuilder<String>(
-                            future: getUserName.getNombreUsuario(getUser.user.value),
+                            future: getUserName
+                                .getNombreUsuario(getUser.user.value),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Text(
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Text(
                                   "Cargando...",
                                   style: TextStyle(
                                     fontSize: 22,
@@ -64,7 +66,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                 );
                               } else if (snapshot.hasError) {
-                                return Text(
+                                return const Text(
                                   "Error al cargar nombre",
                                   style: TextStyle(
                                     fontSize: 22,
@@ -74,7 +76,7 @@ class HomePage extends StatelessWidget {
                               } else {
                                 return Text(
                                   snapshot.data ?? 'Nombre no disponible',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 22,
                                     color: Colors.white,
                                   ),
@@ -91,7 +93,7 @@ class HomePage extends StatelessWidget {
             )),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF5F2C82), Color(0xFF49A09D)],
             begin: Alignment.topCenter,
@@ -135,7 +137,6 @@ class HomePage extends StatelessWidget {
                     ),
                     TableRow(
                       children: [
-<<<<<<< HEAD
                         CategoriaBotonConImagen(
                           nombre: '/lenguaje_programacion',
                           imagePath: 'lib/assets/flutter.png',
@@ -149,15 +150,6 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-=======
-                        CategoriaBoton(
-                            nombre: '/lenguaje_programacion',
-                            icono: Icons.flutter_dash,
-                            texto: 'Lenguaje de Programación'),
-                        BotonCategoriaMixta()
-                      ]
-                    )
->>>>>>> b82d09f82502275199e0e6c16d83f904d05b79a9
                   ],
                 ),
               ],
@@ -189,12 +181,12 @@ class CategoriaBotonConImagen extends StatelessWidget {
         Get.toNamed(nombre);
       },
       child: Container(
-        margin: EdgeInsets.all(8.0),
-        padding: EdgeInsets.all(20.0),
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               offset: Offset(0, 5),
@@ -210,11 +202,11 @@ class CategoriaBotonConImagen extends StatelessWidget {
               height: 50,
               width: 50,
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
               texto,
               textAlign: textAlign,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -242,12 +234,12 @@ class BotonCategoriaMixtaConImagen extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        margin: EdgeInsets.all(8.0),
-        padding: EdgeInsets.all(20.0),
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               offset: Offset(0, 5),
@@ -263,11 +255,11 @@ class BotonCategoriaMixtaConImagen extends StatelessWidget {
               height: 50,
               width: 50,
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
               texto,
               textAlign: textAlign,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
