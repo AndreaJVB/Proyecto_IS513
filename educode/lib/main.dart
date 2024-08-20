@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         // Rutas para HomeMultiPage y WheelPage
         GetPage(
             name: '/home_multi',
-            page: () => HomeMultiPage(getUser: Get.put(UserController()))),
+            page: () => HomeMultiPage()),
         GetPage(
             name: '/wheel',
             page: () => WheelPage(

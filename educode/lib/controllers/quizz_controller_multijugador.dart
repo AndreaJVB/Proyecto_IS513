@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,22 +13,16 @@ class QuizzControllerMultijugador extends GetxController {
   var currentPlayer = 1.obs;
   var currentRound = 1.obs;
   final int totalRounds = 10;
+  var gameEnded = false.obs;
 
-  // URLs de los archivos JSON para cada tema
   final Map<String, String> urls = {
-    'Algoritmo':
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/algoritmo.json',
-    'Base de Datos':
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/basedatos.json',
-    'Flutter':
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/flutter.json',
-    'POO':
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/Programacion%20Orienta%20a%20Objeto.json',
-    'Programación':
-        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json',
+    'Algoritmo': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/algoritmo.json',
+    'Base de Datos': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/basedatos.json',
+    'Flutter': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/flutter.json',
+    'POO': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/Programacion%20Orienta%20a%20Objeto.json',
+    'Programación': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json',
   };
 
-  // Método para cargar las preguntas según el tema
   Future<void> loadQuestions(String topic) async {
     final url = urls[topic];
     if (url != null) {
@@ -49,11 +44,10 @@ class QuizzControllerMultijugador extends GetxController {
     }
   }
 
-  // Método para obtener una pregunta aleatoria
   void getRandomQuestion() {
     if (questions.isNotEmpty) {
       final randomIndex = (questions.length *
-              (new DateTime.now().millisecondsSinceEpoch % 1000) ~/
+              (DateTime.now().millisecondsSinceEpoch % 1000) ~/
               1000) %
           questions.length;
       final questionData = questions[randomIndex];
@@ -65,8 +59,9 @@ class QuizzControllerMultijugador extends GetxController {
     }
   }
 
-  // Método para verificar la respuesta y actualizar las estrellas
-  void checkAnswer(String answer) {
+  void checkAnswer(String answer, String nombre1, String nombre2) {
+    if (gameEnded.value) return; // Salir si el juego ya terminó
+
     if (answer == correctAnswer.value) {
       // Respuesta correcta: sumar una estrella
       if (currentPlayer.value == 1 && player1Stars.value < 5) {
@@ -84,39 +79,64 @@ class QuizzControllerMultijugador extends GetxController {
     }
 
     // Verificar si alguno ha ganado
-    if (player1Stars.value == 5 || player2Stars.value == 5) {
-      determineWinner();
-    } else if (currentRound.value < totalRounds) {
-      // Avanzar a la siguiente ronda si aún no se ha alcanzado el total de rondas
-      currentRound.value += 1;
+    // if (player1Stars.value == 5 || player2Stars.value == 5) {
+    //   gameEnded.value = true;
+    //   showGanadorDialog(nombre1);
+    // } 
+     if (currentRound.value < totalRounds) {
       currentPlayer.value = currentPlayer.value == 1 ? 2 : 1;
+      currentRound.value += 1;
       _showTurnNotification();
       getRandomQuestion();
+    } else {
+       determineWinner(nombre1, nombre2);
+      gameEnded.value = true;
+     
     }
   }
 
-  // Método para determinar el ganador y finalizar el juego
-  void determineWinner() {
-    String winner = '';
+  void determineWinner(String nombre1, String nombre2) {
+    String winner;
     if (player1Stars.value == 5) {
-      winner = 'Jugador 1';
+      winner = '¡Jugador 1 Gana!';
+      showGanadorDialog(nombre1);
     } else if (player2Stars.value == 5) {
-      winner = 'Jugador 2';
+      winner = '¡Jugador 2 Gana!';
+      showGanadorDialog(nombre2);
+    } else {
+      winner = '¡Es un empate!';
+      showGanadorDialog(nombre1); // Puedes decidir a quién mostrar, en este caso nombre1
     }
-
-    currentQuestion.value = '¡Ganaste! Felicidades $winner';
-
-    // Redirigir a la pantalla de ingreso de datos después de 3 segundos
-    Future.delayed(Duration(seconds: 3), () {
-      Get.offAllNamed(
-          '/home_multi'); // Cambia '/home_multi' por la ruta de tu pantalla de ingreso de datos si es diferente
-    });
+    Get.snackbar('Resultado', winner,
+        snackPosition: SnackPosition.TOP, duration: Duration(seconds: 3));
   }
 
-  // Método para mostrar la notificación del turno
+  void showGanadorDialog(String nombre) {
+    Get.defaultDialog(
+      title: 'GANADOR',
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("GANADOR: ${nombre}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ],
+      ),
+      actions: [
+        OutlinedButton(
+          onPressed: () {
+            Get.back(); // Cambia esta ruta si es necesario
+          },
+          child: Text("VOLVER AL INICIO"),
+        ),
+      ],
+    );
+  }
+
   void _showTurnNotification() {
-    String playerName = currentPlayer.value == 1 ? 'Jugador 1' : 'Jugador 2';
-    Get.snackbar('Turno del Jugador', 'Turno del jugador: $playerName',
-        snackPosition: SnackPosition.BOTTOM);
+    Get.snackbar(
+      'Turno de Jugador ${currentPlayer.value}',
+      '¡Prepárate para responder!',
+      snackPosition: SnackPosition.TOP,
+      duration: Duration(seconds: 2),
+    );
   }
 }
