@@ -1,4 +1,4 @@
-import 'package:educode/interfaces/pages/results_poo.dart/results_basedatos.dart';
+import 'package:educode/interfaces/pages/topic_pages/results_basedatos.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -41,7 +41,8 @@ class MixtoController extends GetxController {
 
       questions.shuffle();
       if (questions.length > 20) {
-        questions = questions.sublist(0, 20).obs; // Selecciona 20 preguntas al azar
+        questions =
+            questions.sublist(0, 20).obs; // Selecciona 20 preguntas al azar
       }
 
       if (questions.isNotEmpty) {
@@ -69,7 +70,8 @@ class MixtoController extends GetxController {
   void answerQuestion(String selectedOption) {
     if (this.selectedOption.isEmpty) {
       timer?.cancel();
-      if (selectedOption == questions[currentQuestionIndex.value]['respuesta_marcada']) {
+      if (selectedOption ==
+          questions[currentQuestionIndex.value]['respuesta_marcada']) {
         score++;
       }
       this.selectedOption.value = selectedOption;
@@ -78,7 +80,8 @@ class MixtoController extends GetxController {
         if (currentQuestionIndex.value < questions.length - 1) {
           _nextQuestion();
         } else {
-          Get.to(() => ResultsBasedatos(score: score.value, total: questions.length, topic: 'Mixto'));
+          Get.to(() => ResultsBasedatos(
+              score: score.value, total: questions.length, topic: 'Mixto'));
         }
       });
     }
@@ -89,7 +92,8 @@ class MixtoController extends GetxController {
       if (currentQuestionIndex.value < questions.length - 1) {
         _nextQuestion();
       } else {
-        Get.to(() => ResultsBasedatos(score: score.value, total: questions.length, topic: 'Mixto'));
+        Get.to(() => ResultsBasedatos(
+            score: score.value, total: questions.length, topic: 'Mixto'));
       }
     }
   }
@@ -97,7 +101,8 @@ class MixtoController extends GetxController {
   void _nextQuestion() {
     currentQuestionIndex.value++;
     selectedOption.value = '';
-    tema.value = questions[currentQuestionIndex.value]['tema']; // Actualiza el tema para la siguiente pregunta
+    tema.value = questions[currentQuestionIndex.value]
+        ['tema']; // Actualiza el tema para la siguiente pregunta
     _startTimer();
   }
 

@@ -17,11 +17,11 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF3A1C71),
+        backgroundColor: const Color(0xFF3A1C71),
         automaticallyImplyLeading: false,
         toolbarHeight: screenP.altura * 0.25,
         flexibleSpace: Obx(() => Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage("lib/assets/fondo.jpg"),
@@ -37,13 +37,13 @@ class HomePage extends StatelessWidget {
                       backgroundImage:
                           NetworkImage(getUser.user.value?.photoURL ?? ""),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Hola,",
                             style: TextStyle(
                               fontSize: 26,
@@ -51,12 +51,14 @@ class HomePage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           FutureBuilder<String>(
-                            future: getUserName.getNombreUsuario(getUser.user.value),
+                            future: getUserName
+                                .getNombreUsuario(getUser.user.value),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Text(
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Text(
                                   "Cargando...",
                                   style: TextStyle(
                                     fontSize: 22,
@@ -64,7 +66,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                 );
                               } else if (snapshot.hasError) {
-                                return Text(
+                                return const Text(
                                   "Error al cargar nombre",
                                   style: TextStyle(
                                     fontSize: 22,
@@ -74,7 +76,7 @@ class HomePage extends StatelessWidget {
                               } else {
                                 return Text(
                                   snapshot.data ?? 'Nombre no disponible',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 22,
                                     color: Colors.white,
                                   ),
@@ -91,7 +93,7 @@ class HomePage extends StatelessWidget {
             )),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF5F2C82), Color(0xFF49A09D)],
             begin: Alignment.topCenter,
@@ -107,41 +109,162 @@ class HomePage extends StatelessWidget {
                   children: [
                     TableRow(
                       children: [
-                        CategoriaBoton(
+                        CategoriaBotonConImagen(
                           nombre: "/basedatos",
-                          icono: Icons.storage,
+                          imagePath: 'lib/assets/basedatos.png',
                           texto: 'Base de Datos',
                         ),
-                        CategoriaBoton(
-                            nombre: '/programacion',
-                            icono: Icons.computer,
-                            texto: 'Programación'),
+                        CategoriaBotonConImagen(
+                          nombre: '/programacion',
+                          imagePath: 'lib/assets/programacion.png',
+                          texto: 'Programación',
+                        ),
                       ],
                     ),
                     TableRow(
                       children: [
-                        CategoriaBoton(
-                            nombre: '/poo', icono: Icons.code, texto: 'POO'),
-                        CategoriaBoton(
-                            nombre: '/algoritmo',
-                            icono: Icons.functions,
-                            texto: 'Algoritmo')
+                        CategoriaBotonConImagen(
+                          nombre: '/poo',
+                          imagePath: 'lib/assets/poo.png',
+                          texto: 'POO',
+                        ),
+                        CategoriaBotonConImagen(
+                          nombre: '/algoritmo',
+                          imagePath: 'lib/assets/algoritmo.png',
+                          texto: 'Algoritmo',
+                        ),
                       ],
                     ),
                     TableRow(
                       children: [
-                        CategoriaBoton(
-                            nombre: '/lenguaje_programacion',
-                            icono: Icons.flutter_dash,
-                            texto: 'Lenguaje de Programación'),
-                        BotonCategoriaMixta()
-                      ]
-                    )
+                        CategoriaBotonConImagen(
+                          nombre: '/lenguaje_programacion',
+                          imagePath: 'lib/assets/flutter.png',
+                          texto: 'Lenguaje de Programación',
+                          textAlign: TextAlign.center,
+                        ),
+                        BotonCategoriaMixtaConImagen(
+                          imagePath: 'lib/assets/mixto.jpg',
+                          texto: 'Preguntas       Mixtas',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CategoriaBotonConImagen extends StatelessWidget {
+  final String nombre;
+  final String imagePath;
+  final String texto;
+  final TextAlign textAlign;
+
+  const CategoriaBotonConImagen({
+    required this.nombre,
+    required this.imagePath,
+    required this.texto,
+    this.textAlign = TextAlign.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(nombre);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 5),
+              blurRadius: 10.0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 50,
+              width: 50,
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              texto,
+              textAlign: textAlign,
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BotonCategoriaMixtaConImagen extends StatelessWidget {
+  final String imagePath;
+  final String texto;
+  final TextAlign textAlign;
+
+  const BotonCategoriaMixtaConImagen({
+    required this.imagePath,
+    required this.texto,
+    this.textAlign = TextAlign.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 5),
+              blurRadius: 10.0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 50,
+              width: 50,
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              texto,
+              textAlign: textAlign,
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );

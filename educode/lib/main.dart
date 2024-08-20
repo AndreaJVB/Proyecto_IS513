@@ -1,15 +1,16 @@
 import 'package:educode/interfaces/pages/login_register/recuperar_contra.dart';
+import 'package:educode/interfaces/pages/topic_pages/mixto_page.dart';
 import 'package:educode/mode_page.dart';
 import 'package:educode/interfaces/pages/game_mode/multijugador_page.dart';
 import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
 import 'package:educode/interfaces/pages/login_register/inicio.dart';
 import 'package:educode/interfaces/pages/login_register/login_page.dart';
 import 'package:educode/interfaces/pages/login_register/registro_page.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/algoritmo_page.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/basedatos_page.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/lenguaje_programacion_page.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/programacion_page.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/POO_page.dart';
+import 'package:educode/interfaces/pages/topic_pages/algoritmo_page.dart';
+import 'package:educode/interfaces/pages/topic_pages/basedatos_page.dart';
+import 'package:educode/interfaces/pages/topic_pages/lenguaje_programacion_page.dart';
+import 'package:educode/interfaces/pages/topic_pages/programacion_page.dart';
+import 'package:educode/interfaces/pages/topic_pages/POO_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -53,9 +54,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/algoritmo', page: () => AlgoritmoPage()),
         GetPage(name: '/password', page: () => ForgetPasswordPage()),
         // Rutas para HomeMultiPage y WheelPage
-        GetPage(
-            name: '/home_multi',
-            page: () => HomeMultiPage()),
+        GetPage(name: '/home_multi', page: () => HomeMultiPage()),
         GetPage(
             name: '/wheel',
             page: () => WheelPage(

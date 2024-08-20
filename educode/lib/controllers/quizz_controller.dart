@@ -1,12 +1,10 @@
-import 'package:educode/interfaces/pages/results_poo.dart/results_basedatos.dart';
+import 'package:educode/interfaces/pages/topic_pages/results_basedatos.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:get/get.dart';
 
-
 class QuizController extends GetxController {
-
   QuizController({required this.url, required this.data1, required this.topic});
 
   final String url;
@@ -27,7 +25,6 @@ class QuizController extends GetxController {
   }
 
   Future<void> loadQuestions() async {
-    
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -69,8 +66,11 @@ class QuizController extends GetxController {
         if (currentQuestionIndex.value < questions.length - 1) {
           _nextQuestion();
         } else {
-          Get.to(() =>
-              ResultsBasedatos(score: score.value, total: questions.length, topic: topic,));
+          Get.to(() => ResultsBasedatos(
+                score: score.value,
+                total: questions.length,
+                topic: topic,
+              ));
         }
       });
     }
@@ -82,8 +82,11 @@ class QuizController extends GetxController {
       if (currentQuestionIndex.value < questions.length - 1) {
         _nextQuestion();
       } else {
-        Get.to(() =>
-            ResultsBasedatos(score: score.value, total: questions.length, topic: topic,));
+        Get.to(() => ResultsBasedatos(
+              score: score.value,
+              total: questions.length,
+              topic: topic,
+            ));
       }
     }
   }

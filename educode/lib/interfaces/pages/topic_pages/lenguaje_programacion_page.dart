@@ -1,55 +1,42 @@
-import 'package:educode/controllers/mixto_controller.dart';
-import 'package:educode/controllers/user_controller.dart';
-import 'package:educode/interfaces/pages/results_poo.dart/widgets/boton_volver.dart';
+import 'package:educode/controllers/quizz_controller.dart';
+import 'package:educode/interfaces/pages/topic_pages/widgets/boton_volver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:educode/controllers/user_controller.dart';
 
-class MixtoPage extends StatelessWidget {
-  const MixtoPage({super.key, required this.map});
-
-  final Map<String, List<String>> map;
-
+class LenguajeProgramacionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MixtoController controller = Get.put(MixtoController(map: map));
-    final UserController userController = Get.find<UserController>();
+    final url =
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/flutter.json';
+    final QuizController controller = Get.put(QuizController(
+        url: url, data1: 'Flutter', topic: 'Lenguaje de Programación'));
+    final UserController userController = Get.put(UserController());
 
     return Scaffold(
       backgroundColor: Colors.grey[500],
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[700],
         title: Obx(() {
-          return controller.isLoading.value
-              ? Text(
-                  'Cargando...',
-                  style: TextStyle(color: Colors.white),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Tema: ${controller.questions.isNotEmpty ? controller.questions[controller.currentQuestionIndex.value]['tema'] : ''}',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                );
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          );
         }),
         automaticallyImplyLeading: false,
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (controller.questions.isEmpty) {
           return Center(child: CircularProgressIndicator());
         }
 
-        if (controller.questions.isEmpty) {
-          return Center(child: Text('No hay preguntas disponibles.'));
-        }
-
-        final question = controller.questions[controller.currentQuestionIndex.value];
+        final question =
+            controller.questions[controller.currentQuestionIndex.value];
         final options = question['opciones'] as Map<String, dynamic>;
 
         return SingleChildScrollView(
@@ -72,7 +59,8 @@ class MixtoPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 ...options.entries.map((entry) {
-                  final isSelected = controller.selectedOption.value == entry.key;
+                  final isSelected =
+                      controller.selectedOption.value == entry.key;
                   final isCorrect = entry.key == question['respuesta_marcada'];
                   final color = isSelected
                       ? (isCorrect ? Colors.green : Colors.red)
@@ -81,7 +69,9 @@ class MixtoPage extends StatelessWidget {
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
                     child: ElevatedButton(
-                      onPressed: () => controller.answerQuestion(entry.key),
+                      onPressed: () {
+                        controller.answerQuestion(entry.key);
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         backgroundColor: color,
@@ -100,7 +90,10 @@ class MixtoPage extends StatelessWidget {
                 SizedBox(height: 20),
                 Text(
                   'Tiempo restante: ${controller.timeLeft.value} segundos',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 20),
