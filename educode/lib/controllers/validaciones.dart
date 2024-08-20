@@ -36,5 +36,15 @@ class Validacion {
     }
     return null;
   }
-  
+
+  //NOMBRE DE USUARIO
+  String? nombreUsuario(String? textoValidar) {
+    if (textoValidar == null || textoValidar.isEmpty) {
+      return 'El usuario es obligatoria';
+    }
+    if(textoValidar.length>20){
+      return 'El Nombre de usuario no puede tener mas de 20 caracteres';
+    }
+    return null;
+  }
 }

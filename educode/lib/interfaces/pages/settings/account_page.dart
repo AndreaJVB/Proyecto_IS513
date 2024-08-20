@@ -1,5 +1,5 @@
-
 import 'package:educode/controllers/user_controller.dart';
+import 'package:educode/controllers/historial_controller.dart'; // Asegúrate de importar el HistorialController
 import 'package:educode/interfaces/pages/settings/widgets/account_text_custom.dart';
 import 'package:educode/interfaces/pages/settings/widgets/text_password_custom.dart';
 import 'package:educode/interfaces/widgets/circle_avatar.dart';
@@ -8,19 +8,34 @@ import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
   final UserController getUser = Get.find<UserController>();
+  final HistorialController historialController = HistorialController(); // Instancia de HistorialController
 
   @override
   Widget build(BuildContext context) {
     // Observables
     RxBool isEditName = false.obs;
-    RxBool isEditEmail = false.obs;
+    RxBool isEditUsuario = false.obs;
 
-    //CONTROLLER
-    TextEditingController nombre = TextEditingController(text: getUser.user.value?.displayName ?? '');
-    TextEditingController email = TextEditingController(text: getUser.user.value?.email ?? '');
+    // Controllers
+    TextEditingController nombre = TextEditingController();
+    TextEditingController usuario = TextEditingController();
     TextEditingController password = TextEditingController();
     TextEditingController newPassword = TextEditingController();
-    CircleAvatarCustom().avatar.avatar.value = getUser.user.value?.photoURL ?? "";
+
+    // Initialize controllers with current user values
+    Future<void> initializeControllers() async {
+      final currentUser = getUser.user.value;
+      nombre.text = currentUser?.displayName ?? '';
+      
+      // Get the username using HistorialController
+      final username = await historialController.getNombreUsuario(currentUser);
+      usuario.text = username;
+
+      CircleAvatarCustom().avatar.avatar.value = currentUser?.photoURL ?? '';
+    }
+
+    // Call this function when building
+    initializeControllers();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,35 +70,40 @@ class ProfilePage extends StatelessWidget {
                     SizedBox(height: 20),
                     CircleAvatarCustom(),
                     SizedBox(height: 20),
-                    Obx((){
+                    Obx(() {
                       return Text(
-                      getUser.user.value?.displayName ?? "User Name",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
+                        getUser.user.value?.displayName ?? "User Name",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
                     }),
                     SizedBox(height: 10),
-                    Obx((){
-                      return  Text(
-                      getUser.user.value?.email ?? "user@example.com",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    );
+                    Obx(() {
+                      return Text(
+                        getUser.user.value?.email ?? "user@example.com",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 16,
+                        ),
+                      );
                     }),
-                    
                     SizedBox(height: 20),
                     Divider(color: Colors.white54),
-                    
-                    TextFieldAccount(nombre: nombre, isEdit: isEditName, label: "Nombre"),
+                    TextFieldAccount(
+                      nombre: nombre,
+                      isEdit: isEditName,
+                      label: "Nombre",
+                    ),
                     SizedBox(height: 10),
-                    TextFieldAccount(nombre: email, isEdit: isEditEmail, label: "Correo"),
+                    TextFieldAccount(
+                      nombre: usuario,
+                      isEdit: isEditUsuario,
+                      label: "Usuario",
+                    ),
                     SizedBox(height: 10),
-                    
                     TextButton(
                       onPressed: () {
                         showDialog(
@@ -97,13 +117,22 @@ class ProfilePage extends StatelessWidget {
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      TextPassword(password: password, label: "Contraseña actual"),
+                                      TextPassword(
+                                        password: password,
+                                        label: "Contraseña actual",
+                                      ),
                                       SizedBox(height: 20),
-                                      TextPassword(password: newPassword, label: "Nueva contraseña"),
+                                      TextPassword(
+                                        password: newPassword,
+                                        label: "Nueva contraseña",
+                                      ),
                                       SizedBox(height: 20),
                                       OutlinedButton(
                                         onPressed: () {
-                                          getUser.cambiarContrasena(password.text, newPassword.text);
+                                          getUser.cambiarContrasena(
+                                            password.text,
+                                            newPassword.text,
+                                          );
                                           Navigator.of(context).pop(); // Cerrar el diálogo
                                         },
                                         child: Text("Guardar contraseña"),
@@ -118,15 +147,19 @@ class ProfilePage extends StatelessWidget {
                       },
                       child: Text("Cambiar contraseña", style: TextStyle(color: Colors.white)),
                     ),
-                    
                     SizedBox(height: 10),
-                    Obx(() => (isEditName.value || isEditEmail.value || CircleAvatarCustom().avatar.avatar.value != getUser.user.value?.photoURL)
+                    Obx(() => (isEditName.value || isEditUsuario.value || CircleAvatarCustom().avatar.avatar.value != getUser.user.value?.photoURL)
                         ? ElevatedButton(
                             onPressed: () {
-                              getUser.actualizarDatos(email.text, nombre.text, CircleAvatarCustom().avatar.avatar.value ).then((_) {
+                              historialController.actualizarNombreUsuario(
+                                uid: getUser.user.value!.uid, nuevoNombreUsuario: usuario.text);
+                              getUser.actualizarDatos(
+                                nombre.text,
+                                CircleAvatarCustom().avatar.avatar.value,
+                              ).then((_) {
                                 // Después de actualizar los datos, restablecer el modo de edición
                                 isEditName.value = false;
-                                isEditEmail.value = false;
+                                isEditUsuario.value = false;
                               });
                             },
                             child: Text("Guardar cambios"),
@@ -167,7 +200,6 @@ class ProfilePage extends StatelessWidget {
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.redAccent),
                   onTap: () {
                     getUser.cerrarSesion();
-                    
                   },
                 ),
               ),

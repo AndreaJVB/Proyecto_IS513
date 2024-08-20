@@ -6,10 +6,9 @@ import 'package:get/get.dart';
 class HomeMultiPage extends StatelessWidget {
   HomeMultiPage({
     super.key,
-    required this.getUser,
   });
 
-  final UserController getUser;
+  final getUser = Get.put<UserController>(UserController()) ;
   final controller = Get.put<MultijugadorController>(MultijugadorController());
 
   @override

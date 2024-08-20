@@ -16,7 +16,7 @@ class MultijugadorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetOptions = <Widget>[
-      HomeMultiPage(getUser: getUser),
+      HomeMultiPage(),
       ProfilePage(),
     ];
 

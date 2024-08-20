@@ -1,5 +1,8 @@
 import 'package:educode/interfaces/pages/login_register/recuperar_contra.dart';
+<<<<<<< HEAD
 import 'package:educode/interfaces/pages/topic_pages/mixto_page.dart';
+=======
+>>>>>>> b82d09f82502275199e0e6c16d83f904d05b79a9
 import 'package:educode/mode_page.dart';
 import 'package:educode/interfaces/pages/game_mode/multijugador_page.dart';
 import 'package:educode/interfaces/pages/game_mode/solitario_page.dart';
@@ -56,7 +59,7 @@ class MyApp extends StatelessWidget {
         // Rutas para HomeMultiPage y WheelPage
         GetPage(
             name: '/home_multi',
-            page: () => HomeMultiPage(getUser: Get.put(UserController()))),
+            page: () => HomeMultiPage()),
         GetPage(
             name: '/wheel',
             page: () => WheelPage(

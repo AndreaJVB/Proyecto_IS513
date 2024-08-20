@@ -30,7 +30,7 @@ class _WheelPageState extends State<WheelPage> {
     "Flutter"
   ];
 
-  StreamController<int> selected = StreamController<int>();
+  final StreamController<int> selected = StreamController<int>();
   int selectedIndex = 0;
   int previousIndex = -1;
 
@@ -42,6 +42,7 @@ class _WheelPageState extends State<WheelPage> {
     super.dispose();
   }
 
+  // Seleccionar un nuevo índice para la rueda
   void _selectNewIndex() {
     do {
       selectedIndex = Fortune.randomInt(0, topics.length);
@@ -49,6 +50,7 @@ class _WheelPageState extends State<WheelPage> {
     previousIndex = selectedIndex;
   }
 
+  // Mostrar el diálogo de preguntas
   void _showQuestionDialog() {
     Get.defaultDialog(
       title: "Pregunta",
@@ -73,7 +75,7 @@ class _WheelPageState extends State<WheelPage> {
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      quizzController.checkAnswer(letter);
+                      quizzController.checkAnswer(letter, widget.player1Name, widget.player2Name);
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
@@ -98,6 +100,7 @@ class _WheelPageState extends State<WheelPage> {
     );
   }
 
+  // Construir las estrellas de progreso de cada jugador
   Widget _buildStars(int filledStars) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -120,29 +123,18 @@ class _WheelPageState extends State<WheelPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Sección de jugadores
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Icon(widget.player1Icon, size: 40),
-                    Text('P1: ${widget.player1Name}'),
-                    Obx(() => _buildStars(quizzController.player1Stars.value)),
-                  ],
-                ),
+                _buildPlayerInfo(widget.player1Icon, widget.player1Name, quizzController.player1Stars),
                 Text('VS',
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                Column(
-                  children: [
-                    Icon(widget.player2Icon, size: 40),
-                    Text('P2: ${widget.player2Name}'),
-                    Obx(() => _buildStars(quizzController.player2Stars.value)),
-                  ],
-                ),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                _buildPlayerInfo(widget.player2Icon, widget.player2Name, quizzController.player2Stars),
               ],
             ),
             SizedBox(height: 20),
+            // Sección de la rueda
             Expanded(
               child: Stack(
                 alignment: Alignment.center,
@@ -160,6 +152,23 @@ class _WheelPageState extends State<WheelPage> {
                         ),
                     ],
                     onAnimationEnd: () {
+                      // if(quizzController.player1Stars.value == 5 || quizzController.player2Stars.value == 5){
+                      
+                      //                 Get.defaultDialog(
+                      //             title: "GANADOR",
+                      //             content: Obx(() {
+                      //               return Column(
+                      //                 children: [
+                      //                   Text("Juego terminado ganador ${quizzController.player1Stars.value}"),
+                      //                   ElevatedButton(onPressed: (){
+                      //                     Get.toNamed('/home_multi');
+                      //                   }, child: Text("Volver"))
+                      //                 ],
+                      //               );
+                      //             }),
+                      //           );
+                              
+                      // }
                       final selectedTopic = topics[selectedIndex];
                       quizzController.loadQuestions(selectedTopic).then((_) {
                         if (quizzController.currentQuestion.value.isNotEmpty) {
@@ -169,6 +178,9 @@ class _WheelPageState extends State<WheelPage> {
                               'No se pudo cargar la pregunta para el tema $selectedTopic');
                         }
                       });
+
+                      
+
                     },
                   ),
                   ElevatedButton(
@@ -186,4 +198,17 @@ class _WheelPageState extends State<WheelPage> {
       ),
     );
   }
+
+  // Construir la información del jugador
+  Widget _buildPlayerInfo(IconData icon, String name, RxInt stars) {
+    return Column(
+      children: [
+        Icon(icon, size: 40),
+        Text(name),
+        Obx(() => _buildStars(stars.value)),
+      ],
+    );
+  }
 }
+
+

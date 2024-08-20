@@ -1,7 +1,7 @@
+import 'package:educode/controllers/historial_controller.dart';
 import 'package:educode/controllers/user_controller.dart';
 import 'package:educode/interfaces/pages/home/widgets/boton_categoria_mixta.dart';
 import 'package:educode/interfaces/pages/home/widgets/botones_categoria.dart';
-import 'package:educode/interfaces/pages/home/widgets/escoger_categoria.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,8 +12,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenP = ScreenProperty(
-        context: context); // Asegúrate de que esta clase esté bien definida
+    final HistorialController getUserName = HistorialController();
+    final screenP = ScreenProperty(context: context);
 
     return Scaffold(
       appBar: AppBar(
@@ -52,12 +52,35 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 4),
-                          Text(
-                            "${getUser.user.value?.displayName ?? 'Nombre no disponible'}",
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.white,
-                            ),
+                          FutureBuilder<String>(
+                            future: getUserName.getNombreUsuario(getUser.user.value),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Text(
+                                  "Cargando...",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Text(
+                                  "Error al cargar nombre",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                );
+                              } else {
+                                return Text(
+                                  snapshot.data ?? 'Nombre no disponible',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                );
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -112,6 +135,7 @@ class HomePage extends StatelessWidget {
                     ),
                     TableRow(
                       children: [
+<<<<<<< HEAD
                         CategoriaBotonConImagen(
                           nombre: '/lenguaje_programacion',
                           imagePath: 'lib/assets/flutter.png',
@@ -125,6 +149,15 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
+=======
+                        CategoriaBoton(
+                            nombre: '/lenguaje_programacion',
+                            icono: Icons.flutter_dash,
+                            texto: 'Lenguaje de Programación'),
+                        BotonCategoriaMixta()
+                      ]
+                    )
+>>>>>>> b82d09f82502275199e0e6c16d83f904d05b79a9
                   ],
                 ),
               ],
