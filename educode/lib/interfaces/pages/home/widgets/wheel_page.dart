@@ -181,8 +181,17 @@ class _WheelPageState extends State<WheelPage> {
               onPressed: quizzController.selectedAnswer.value.isNotEmpty
                   ? () {
                       Navigator.of(context).pop();
-                      quizzController.selectedAnswer.value = ""; // Cierra el diálogo solo si se ha seleccionado una respuesta
-                    }
+                      quizzController.selectedAnswer.value = "";
+                      if(quizzController.player1Stars.value == 5 || quizzController.player2Stars.value == 5){
+                              if(quizzController.player1Stars.value == 5){
+                                quizzController.showGanadorDialog("EL GANADOR ES ${widget.player1Name}");
+                              }else{
+                               quizzController.showGanadorDialog("EL GANADOR ES ${widget.player2Name}");
+                              }
+                            } else if(quizzController.currentRound.value == 20){
+                                quizzController.showGanadorDialog("NINGUNO GANO ES UN EMPATE");
+                            }
+                          } // Cierra el diálogo solo si se ha seleccionado una respuesta
                   : null, // Deshabilitado si no se ha seleccionado una respuesta
             );
             })
