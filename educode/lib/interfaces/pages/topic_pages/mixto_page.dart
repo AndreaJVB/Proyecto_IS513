@@ -100,10 +100,29 @@ class MixtoPage extends StatelessWidget {
                   );
                 }).toList(),
                 SizedBox(height: 20),
-                Text(
-                  'Tiempo restante: ${controller.timeLeft.value} segundos',
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                  textAlign: TextAlign.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Tiempo restante:',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(
+                      Icons.timer, // Icono de cronómetro junto a los segundos
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      '${controller.timeLeft.value} segundos',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 BotonRegresarHome(userController: userController),

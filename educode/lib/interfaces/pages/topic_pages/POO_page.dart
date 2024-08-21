@@ -94,13 +94,24 @@ class POOPage extends StatelessWidget {
                   );
                 }).toList(),
                 SizedBox(height: 20),
-                Text(
-                  'Tiempo restante: ${controller.timeLeft.value} segundos',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.timer, // Icono de cronómetro
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Tiempo restante: ${controller.timeLeft.value} segundos',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 BotonRegresarHome(userController: userController),
