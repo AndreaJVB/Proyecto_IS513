@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EscogerCategoria extends StatefulWidget {
+  const EscogerCategoria({super.key, required this.cantidad});
+
+  final int cantidad;
+
   @override
   _EscogerCategoriaState createState() => _EscogerCategoriaState();
 }
@@ -44,7 +48,7 @@ class _EscogerCategoriaState extends State<EscogerCategoria> {
       actions: [
         TextButton(
           onPressed: () {
-            if (seleccionadas.length >= 2) {
+            if (seleccionadas.length >= widget.cantidad) {
               // Do something with the selected categories
               Get.back(result: seleccionadas);
             } else {

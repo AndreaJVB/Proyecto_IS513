@@ -64,7 +64,7 @@ class _WheelPageState extends State<WheelPage> {
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              children: widget.topics.sublist(0, widget.topics.length - 1).map((topic) {
+              children: widget.topics.sublist(1, widget.topics.length).map((topic) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: ElevatedButton(

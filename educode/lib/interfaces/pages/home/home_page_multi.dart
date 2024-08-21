@@ -1,4 +1,3 @@
-import 'package:educode/interfaces/pages/home/widgets/boton_categoria_mixta.dart';
 import 'package:educode/interfaces/pages/home/widgets/mixtas_multijugador.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -111,6 +110,10 @@ class HomeMultiPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       print(categorias.listaMostrar);
+                      if(categorias.listaMostrar.length == 1   || categorias.listaMostrar.length == null){
+                        Get.snackbar("Error", "Seleccione las categorias");
+                        return;
+                      } 
                       if (controller.formKey.currentState!.validate()) {
                         Get.to(() => WheelPage(
                               player1Name: controller.player1Controller.text,

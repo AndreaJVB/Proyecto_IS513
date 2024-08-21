@@ -12,7 +12,7 @@ class BotonCategoriaMixtaMultijugador extends GetxController {
     return GestureDetector(
       onTap: () async {
         final seleccionadas = await Get.dialog<List<String>>(
-          EscogerCategoria(),
+          EscogerCategoria(cantidad: 1,),
         );
         if (seleccionadas != null && seleccionadas.length >= 2) {
           // Limpia las categorías existentes antes de añadir nuevas
@@ -42,7 +42,7 @@ class BotonCategoriaMixtaMultijugador extends GetxController {
                   'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/flutter.json',
                   'Flutter'
                 ];
-                listaMostrar.add("Lenguaje de Programación");
+                listaMostrar.add("Flutter");
               }
               if (categoria == 'Programación Orientada a Objetos') {
                 map[categoria] = [
