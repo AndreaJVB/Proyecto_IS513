@@ -21,9 +21,7 @@ class MultijugadorPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Multijugador'),
-      ),
+     
       bottomNavigationBar: BottomNavigationBarCustom(
         indexs: getUser.selectedIndex,
         itemsBar: _navigation,
