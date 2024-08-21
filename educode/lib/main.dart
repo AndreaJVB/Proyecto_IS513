@@ -55,15 +55,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/password', page: () => ForgetPasswordPage()),
         // Rutas para HomeMultiPage y WheelPage
         GetPage(name: '/home_multi', page: () => HomeMultiPage()),
-        GetPage(
-            name: '/wheel',
-            page: () => WheelPage(
-                  player1Name:
-                      'Jugador 1', // Valores predeterminados, puedes cambiar esto según tu lógica
-                  player1Icon: Icons.person,
-                  player2Name: 'Jugador 2',
-                  player2Icon: Icons.person_outline,
-                )),
+        
       ],
     );
   }

@@ -1,14 +1,17 @@
+import 'package:educode/interfaces/pages/home/widgets/boton_categoria_mixta.dart';
+import 'package:educode/interfaces/pages/home/widgets/mixtas_multijugador.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:educode/controllers/user_controller.dart';
 import 'package:educode/interfaces/pages/home/widgets/wheel_page.dart';
 
 class HomeMultiPage extends StatelessWidget {
-  HomeMultiPage({super.key});
+  HomeMultiPage({super.key, this.map });
 
   final getUser = Get.put<UserController>(UserController());
   final controller = Get.put<MultijugadorController>(MultijugadorController());
-
+  final categorias = Get.put<BotonCategoriaMixtaMultijugador>(BotonCategoriaMixtaMultijugador());
+  Map<String, List<String>>? map = {};
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +28,7 @@ class HomeMultiPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  categorias.build(context),
                   Text(
                     'Configura los Jugadores',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -106,12 +110,15 @@ class HomeMultiPage extends StatelessWidget {
                   SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
+                      print(categorias.listaMostrar);
                       if (controller.formKey.currentState!.validate()) {
                         Get.to(() => WheelPage(
                               player1Name: controller.player1Controller.text,
                               player1Icon: controller.avatarPlayer1.value,
                               player2Name: controller.player2Controller.text,
                               player2Icon: controller.avatarPlayer2.value,
+                              topics: categorias.listaMostrar,
+                              topicsInfo: categorias.map.values,
                             ));
                       }
                     },
