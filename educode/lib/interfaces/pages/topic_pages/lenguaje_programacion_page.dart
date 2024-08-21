@@ -22,7 +22,7 @@ class LenguajeProgramacionPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                'Lenguaje de programacion ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
                 style: TextStyle(color: Colors.black),
               ),
             ],

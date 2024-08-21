@@ -25,7 +25,7 @@ class AlgoritmoPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                'Algoritmo ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
                 style:
                     TextStyle(color: Colors.black), // Texto del título en negro
               ),

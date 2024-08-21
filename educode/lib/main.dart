@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/solitario',
       getPages: [
         GetPage(name: '/', page: () => const Inicio()),
         GetPage(name: '/login', page: () => LoginPage()),
@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/password', page: () => ForgetPasswordPage()),
         // Rutas para HomeMultiPage y WheelPage
         GetPage(name: '/home_multi', page: () => HomeMultiPage()),
-        
       ],
     );
   }
