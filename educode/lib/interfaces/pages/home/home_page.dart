@@ -1,7 +1,6 @@
 import 'package:educode/controllers/historial_controller.dart';
 import 'package:educode/controllers/user_controller.dart';
 import 'package:educode/interfaces/pages/home/widgets/boton_categoria_mixta.dart';
-import 'package:educode/interfaces/pages/home/widgets/botones_categoria.dart';
 import 'package:educode/interfaces/pages/login_register/widgets/screen_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -176,59 +175,6 @@ class CategoriaBotonConImagen extends StatelessWidget {
       onTap: () {
         Get.offAllNamed(nombre);
       },
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(0, 5),
-              blurRadius: 10.0,
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              imagePath,
-              height: 50,
-              width: 50,
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              texto,
-              textAlign: textAlign,
-              style: const TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BotonCategoriaMixtaConImagen extends StatelessWidget {
-  final String imagePath;
-  final String texto;
-  final TextAlign textAlign;
-
-  const BotonCategoriaMixtaConImagen({
-    required this.imagePath,
-    required this.texto,
-    this.textAlign = TextAlign.center,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
       child: Container(
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(20.0),

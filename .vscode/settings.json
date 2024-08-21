@@ -1,3 +1,4 @@
 {
-    "java.configuration.updateBuildConfiguration": "disabled"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "cmake.sourceDirectory": "C:/Users/av200/Desktop/Lenguajes de Programacion/Proyecto_IS513/educode/linux"
 }

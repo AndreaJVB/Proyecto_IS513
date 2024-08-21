@@ -14,7 +14,7 @@ class BotonCategoriaMixta extends StatelessWidget {
       onTap: () async {
         final Map<String, List<String>> map = {};
         final seleccionadas = await Get.dialog<List<String>>(
-          EscogerCategoria(),
+          EscogerCategoria(cantidad: 2,),
         );
         if (seleccionadas != null && seleccionadas.length >= 2) {
           // Navigate to the appropriate screen with the selected categories

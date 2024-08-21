@@ -12,15 +12,20 @@ class QuizzControllerMultijugador extends GetxController {
   var player2Stars = 0.obs;
   var currentPlayer = 1.obs;
   var currentRound = 1.obs;
-  final int totalRounds = 10;
+  final int totalRounds = 20;
   var gameEnded = false.obs;
 
   final Map<String, String> urls = {
-    'Algoritmo': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/algoritmo.json',
-    'Base de Datos': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/basedatos.json',
-    'Flutter': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/flutter.json',
-    'POO': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/Programacion%20Orienta%20a%20Objeto.json',
-    'Programación': 'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json',
+    'Algoritmo':
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/algoritmo.json',
+    'Base de Datos':
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/basedatos.json',
+    'Flutter':
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/flutter.json',
+    'POO':
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/Programacion%20Orienta%20a%20Objeto.json',
+    'Programación':
+        'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/programacion.json',
   };
 
   Future<void> loadQuestions(String topic) async {
@@ -46,10 +51,8 @@ class QuizzControllerMultijugador extends GetxController {
 
   void getRandomQuestion() {
     if (questions.isNotEmpty) {
-      final randomIndex = (questions.length *
-              (DateTime.now().millisecondsSinceEpoch % 1000) ~/
-              1000) %
-          questions.length;
+      final randomIndex =
+          DateTime.now().millisecondsSinceEpoch % questions.length;
       final questionData = questions[randomIndex];
       currentQuestion.value = questionData['pregunta'];
       final optionsMap = questionData['opciones'] as Map<String, dynamic>;
@@ -62,72 +65,87 @@ class QuizzControllerMultijugador extends GetxController {
   void checkAnswer(String answer, String nombre1, String nombre2) {
     if (gameEnded.value) return; // Salir si el juego ya terminó
 
+    print('Turno actual: Jugador ${currentPlayer.value}');
+    print('Respuesta recibida: $answer');
+    print('Respuesta correcta: ${correctAnswer.value}');
+
     if (answer == correctAnswer.value) {
-      // Respuesta correcta: sumar una estrella
+      print('Respuesta correcta por Jugador ${currentPlayer.value}');
       if (currentPlayer.value == 1 && player1Stars.value < 5) {
         player1Stars.value += 1;
+        print('Jugador 1 ahora tiene ${player1Stars.value} estrellas');
       } else if (currentPlayer.value == 2 && player2Stars.value < 5) {
         player2Stars.value += 1;
+        print('Jugador 2 ahora tiene ${player2Stars.value} estrellas');
       }
     } else {
-      // Respuesta incorrecta: restar una estrella si tiene alguna
+      print('Respuesta incorrecta por Jugador ${currentPlayer.value}');
       if (currentPlayer.value == 1 && player1Stars.value > 0) {
         player1Stars.value -= 1;
+        print(
+            'Jugador 1 pierde una estrella, ahora tiene ${player1Stars.value}');
       } else if (currentPlayer.value == 2 && player2Stars.value > 0) {
         player2Stars.value -= 1;
+        print(
+            'Jugador 2 pierde una estrella, ahora tiene ${player2Stars.value}');
       }
     }
 
-    // Verificar si alguno ha ganado
-    // if (player1Stars.value == 5 || player2Stars.value == 5) {
-    //   gameEnded.value = true;
-    //   showGanadorDialog(nombre1);
-    // } 
-     if (currentRound.value < totalRounds) {
+    if (player1Stars.value == 5 ||
+        player2Stars.value == 5 ||
+        currentRound.value == totalRounds) {
+      gameEnded.value = true;
+      determineWinner(nombre1, nombre2);
+    } else {
       currentPlayer.value = currentPlayer.value == 1 ? 2 : 1;
       currentRound.value += 1;
+      print('Siguiente turno: Jugador ${currentPlayer.value}');
       _showTurnNotification();
       getRandomQuestion();
-    } else {
-       determineWinner(nombre1, nombre2);
-      gameEnded.value = true;
-     
     }
   }
 
   void determineWinner(String nombre1, String nombre2) {
     String winner;
     if (player1Stars.value == 5) {
-      winner = '¡Jugador 1 Gana!';
-      showGanadorDialog(nombre1);
+      winner = '¡${nombre1} Gana!';
     } else if (player2Stars.value == 5) {
-      winner = '¡Jugador 2 Gana!';
-      showGanadorDialog(nombre2);
+      winner = '¡${nombre2} Gana!';
     } else {
       winner = '¡Es un empate!';
-      showGanadorDialog(nombre1); // Puedes decidir a quién mostrar, en este caso nombre1
     }
+    showGanadorDialog(winner);
     Get.snackbar('Resultado', winner,
         snackPosition: SnackPosition.TOP, duration: Duration(seconds: 3));
   }
 
-  void showGanadorDialog(String nombre) {
-    Get.defaultDialog(
-      title: 'GANADOR',
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text("GANADOR: ${nombre}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ],
-      ),
-      actions: [
-        OutlinedButton(
-          onPressed: () {
-            Get.back(); // Cambia esta ruta si es necesario
-          },
-          child: Text("VOLVER AL INICIO"),
-        ),
-      ],
+  void showGanadorDialog(String winnerMessage) {
+    showDialog(
+      context: Get.context!,
+      barrierDismissible:
+          false, // Evita que se cierre el diálogo al tocar fuera
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('GANADOR'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(winnerMessage,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          actions: [
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop();
+                    Get.back(); // Cierra el diálogo y regresa al inicio
+              },
+              child: Text("VOLVER AL INICIO"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -137,6 +155,69 @@ class QuizzControllerMultijugador extends GetxController {
       '¡Prepárate para responder!',
       snackPosition: SnackPosition.TOP,
       duration: Duration(seconds: 2),
+    );
+  }
+
+  void _showQuestionDialog(String nombre1, String nombre2) {
+    showDialog(
+      context: Get.context!,
+      barrierDismissible:
+          false, // Importante: evita que el diálogo se cierre al tocar fuera
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false, // Bloquea la acción de retroceso
+          child: AlertDialog(
+            title: Text("Pregunta"),
+            content: Obx(() {
+              if (currentQuestion.value.isEmpty || currentOptions.isEmpty) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                final optionLetters = ['a', 'b', 'c', 'd'];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize
+                      .min, // Para que el diálogo no sea demasiado grande
+                  children: [
+                    Text(
+                      currentQuestion
+                          .value, // Solo muestra la pregunta sin número
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+                    ...List.generate(currentOptions.length, (index) {
+                      final letter = optionLetters[index];
+                      final option = currentOptions[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            checkAnswer(letter, nombre1, nombre2);
+                            Navigator.of(context)
+                                .pop(); // Cierra el diálogo solo cuando se selecciona una opción
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            minimumSize: Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            '$letter. $option',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                );
+              }
+            }),
+          ),
+        );
+      },
     );
   }
 }
