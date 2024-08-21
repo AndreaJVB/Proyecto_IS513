@@ -1,3 +1,6 @@
+import 'package:educode/controllers/avatar_controller.dart';
+import 'package:educode/interfaces/pages/home/widgets/avatars_player1.dart';
+import 'package:educode/interfaces/pages/home/widgets/avatars_player2.dart';
 import 'package:educode/interfaces/pages/home/widgets/mixtas_multijugador.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +14,8 @@ class HomeMultiPage extends StatelessWidget {
   final controller = Get.put<MultijugadorController>(MultijugadorController());
   final categorias = Get.put<BotonCategoriaMixtaMultijugador>(BotonCategoriaMixtaMultijugador());
   Map<String, List<String>>? map = {};
+
+  final avatar = Get.put<AvatarController>(AvatarController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,22 +57,8 @@ class HomeMultiPage extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 10),
-                  Obx(() => DropdownButton<IconData>(
-                        value: controller.avatarPlayer1.value,
-                        onChanged: (IconData? newValue) {
-                          controller.avatarPlayer1.value = newValue!;
-                        },
-                        items: controller.avatars
-                            .map<DropdownMenuItem<IconData>>(
-                                (IconData value) => DropdownMenuItem<IconData>(
-                                      value: value,
-                                      child: Icon(value, size: 30),
-                                    ))
-                            .toList(),
-                        isExpanded: true,
-                        iconSize: 30,
-                        underline: SizedBox(),
-                      )),
+                  CircleAvatarCustomPlayer1(),
+                  
                   
                   SizedBox(height: 20),
 
@@ -89,22 +80,7 @@ class HomeMultiPage extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 10),
-                  Obx(() => DropdownButton<IconData>(
-                        value: controller.avatarPlayer2.value,
-                        onChanged: (IconData? newValue) {
-                          controller.avatarPlayer2.value = newValue!;
-                        },
-                        items: controller.avatars
-                            .map<DropdownMenuItem<IconData>>(
-                                (IconData value) => DropdownMenuItem<IconData>(
-                                      value: value,
-                                      child: Icon(value, size: 30),
-                                    ))
-                            .toList(),
-                        isExpanded: true,
-                        iconSize: 30,
-                        underline: SizedBox(),
-                      )),
+                  CircleAvatarCustomPlayer2(),
 
                   SizedBox(height: 30),
                   ElevatedButton(
@@ -117,9 +93,9 @@ class HomeMultiPage extends StatelessWidget {
                       if (controller.formKey.currentState!.validate()) {
                         Get.to(() => WheelPage(
                               player1Name: controller.player1Controller.text,
-                              player1Icon: controller.avatarPlayer1.value,
+                              player1Icon: avatar.avatarPlayer1.value,
                               player2Name: controller.player2Controller.text,
-                              player2Icon: controller.avatarPlayer2.value,
+                              player2Icon: avatar.avatarPlayer2.value,
                               topics: categorias.listaMostrar,
                               topicsInfo: categorias.map.values,
                             ));

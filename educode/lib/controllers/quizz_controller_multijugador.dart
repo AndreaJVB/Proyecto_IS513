@@ -4,17 +4,19 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class QuizzControllerMultijugador extends GetxController {
-  var questions = [].obs;
-  var currentQuestion = ''.obs;
-  var currentOptions = <String>[].obs;
-  var correctAnswer = ''.obs;
-  var player1Stars = 0.obs;
-  var player2Stars = 0.obs;
-  var currentPlayer = 1.obs;
-  var currentRound = 1.obs;
+  final questions = [].obs;
+  final currentQuestion = ''.obs;
+  final currentOptions = <String>[].obs;
+  final correctAnswer = ''.obs;
+  final player1Stars = 0.obs;
+  final player2Stars = 0.obs;
+  final currentPlayer = 1.obs;
+  final currentRound = 1.obs;
   final int totalRounds = 20;
-  var gameEnded = false.obs;
+  final gameEnded = false.obs;
+  final selectedAnswer = ''.obs;
 
+  final List<int> usedQuestions = []; // Lista para almacenar preguntas usadas
   final Map<String, String> urls = {
     'Algoritmo':
         'https://raw.githubusercontent.com/Chrisherndz/educode_quizz/main/algoritmo.json',
@@ -37,6 +39,7 @@ class QuizzControllerMultijugador extends GetxController {
         if (data != null && data.isNotEmpty) {
           String firstKey = data.keys.first;
           questions.value = data[firstKey];
+          usedQuestions.clear(); // Limpiar preguntas usadas al cargar nuevo tema
           getRandomQuestion();
         } else {
           print('Error: Datos o preguntas no válidas');
@@ -50,21 +53,29 @@ class QuizzControllerMultijugador extends GetxController {
   }
 
   void getRandomQuestion() {
-    if (questions.isNotEmpty) {
-      final randomIndex =
-          DateTime.now().millisecondsSinceEpoch % questions.length;
+    if (questions.isNotEmpty && usedQuestions.length < questions.length) {
+      int randomIndex;
+      do {
+        randomIndex = DateTime.now().millisecondsSinceEpoch % questions.length;
+      } while (usedQuestions.contains(randomIndex));
+
       final questionData = questions[randomIndex];
       currentQuestion.value = questionData['pregunta'];
       final optionsMap = questionData['opciones'] as Map<String, dynamic>;
       currentOptions.value =
           optionsMap.values.map((option) => option.toString()).toList();
       correctAnswer.value = questionData['respuesta_marcada'].toString();
+
+      usedQuestions.add(randomIndex); // Marcar pregunta como usada
     }
   }
 
+    
+
   void checkAnswer(String answer, String nombre1, String nombre2) {
     if (gameEnded.value) return; // Salir si el juego ya terminó
-
+    selectedAnswer.value = answer; // Actualizar la respuesta seleccionada
+    
     print('Turno actual: Jugador ${currentPlayer.value}');
     print('Respuesta recibida: $answer');
     print('Respuesta correcta: ${correctAnswer.value}');
@@ -82,18 +93,14 @@ class QuizzControllerMultijugador extends GetxController {
       print('Respuesta incorrecta por Jugador ${currentPlayer.value}');
       if (currentPlayer.value == 1 && player1Stars.value > 0) {
         player1Stars.value -= 1;
-        print(
-            'Jugador 1 pierde una estrella, ahora tiene ${player1Stars.value}');
+        print('Jugador 1 pierde una estrella, ahora tiene ${player1Stars.value}');
       } else if (currentPlayer.value == 2 && player2Stars.value > 0) {
         player2Stars.value -= 1;
-        print(
-            'Jugador 2 pierde una estrella, ahora tiene ${player2Stars.value}');
+        print('Jugador 2 pierde una estrella, ahora tiene ${player2Stars.value}');
       }
     }
 
-    if (player1Stars.value == 5 ||
-        player2Stars.value == 5 ||
-        currentRound.value == totalRounds) {
+    if (player1Stars.value == 5 || player2Stars.value == 5 || currentRound.value == totalRounds) {
       gameEnded.value = true;
       determineWinner(nombre1, nombre2);
     } else {
@@ -101,7 +108,7 @@ class QuizzControllerMultijugador extends GetxController {
       currentRound.value += 1;
       print('Siguiente turno: Jugador ${currentPlayer.value}');
       _showTurnNotification();
-      getRandomQuestion();
+      
     }
   }
 
@@ -114,7 +121,7 @@ class QuizzControllerMultijugador extends GetxController {
     } else {
       winner = '¡Es un empate!';
     }
-    showGanadorDialog(winner);
+    
     Get.snackbar('Resultado', winner,
         snackPosition: SnackPosition.TOP, duration: Duration(seconds: 3));
   }
@@ -137,9 +144,8 @@ class QuizzControllerMultijugador extends GetxController {
           actions: [
             OutlinedButton(
               onPressed: () {
-                Navigator.of(context)
-                    .pop();
-                    Get.back(); // Cierra el diálogo y regresa al inicio
+                Navigator.pop(context);
+                Navigator.pop(context); // Cierra el diálogo y regresa al inicio
               },
               child: Text("VOLVER AL INICIO"),
             ),
@@ -175,14 +181,12 @@ class QuizzControllerMultijugador extends GetxController {
                 final optionLetters = ['a', 'b', 'c', 'd'];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize
-                      .min, // Para que el diálogo no sea demasiado grande
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      currentQuestion
-                          .value, // Solo muestra la pregunta sin número
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      currentQuestion.value,
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
                     ...List.generate(currentOptions.length, (index) {

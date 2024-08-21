@@ -63,6 +63,7 @@ class LoginPage extends StatelessWidget {
                             controller: correoControler,
                             fillColor: fillColor,
                             prefixIcon: Icons.email,
+                            keyboardType: TextInputType.emailAddress,
                             ),
                             const SizedBox(height: 20),
 

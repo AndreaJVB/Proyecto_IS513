@@ -103,9 +103,11 @@ class MixtoPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Tiempo restante:',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    Flexible(
+                      child: Text(
+                        'Tiempo restante:',
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
                     ),
                     SizedBox(width: 8),
                     Icon(

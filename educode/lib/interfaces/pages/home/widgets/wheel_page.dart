@@ -7,9 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WheelPage extends StatefulWidget {
   final String player1Name;
-  final IconData player1Icon;
+  final String player1Icon;
   final String player2Name;
-  final IconData player2Icon;
+  final String player2Icon;
   final topicsInfo;
   final List<String> topics;
 
@@ -30,6 +30,7 @@ class _WheelPageState extends State<WheelPage> {
   final StreamController<int> selected = StreamController<int>();
   int selectedIndex = 0;
   int previousIndex = -1;
+  bool _isAnswerSelected = false; // Variable para controlar la selección de respuesta
 
   final quizzController = Get.put(QuizzControllerMultijugador());
 
@@ -40,7 +41,6 @@ class _WheelPageState extends State<WheelPage> {
   }
 
   void _selectNewIndex() {
-    // Selecciona un índice aleatorio válido
     setState(() {
       do {
         selectedIndex = Fortune.randomInt(0, widget.topics.length);
@@ -55,13 +55,10 @@ class _WheelPageState extends State<WheelPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return WillPopScope(
-          onWillPop: () async => false, // Bloquea la acción de retroceso
+          onWillPop: () async => false,
           child: AlertDialog(
-            backgroundColor: Colors.grey[200], // Color neutro
-            title: Text(
-              "Selecciona un tema",
-              style: TextStyle(color: Colors.black),
-            ),
+            backgroundColor: Colors.grey[200],
+            title: Text("Selecciona un tema", style: TextStyle(color: Colors.black)),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: widget.topics.sublist(1, widget.topics.length).map((topic) {
@@ -80,10 +77,7 @@ class _WheelPageState extends State<WheelPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
-                      topic,
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    child: Text(topic, style: TextStyle(fontSize: 16)),
                   ),
                 );
               }).toList(),
@@ -112,126 +106,115 @@ class _WheelPageState extends State<WheelPage> {
     });
   }
 
-  void _showQuestionDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false, // Bloquea la acción de retroceso
-          child: AlertDialog(
-            backgroundColor: Colors.grey[200], // Color neutro
-            title: Text("Pregunta", style: TextStyle(color: Colors.black)),
-            content: Obx(() {
-              if (quizzController.currentQuestion.value.isEmpty ||
-                  quizzController.currentOptions.isEmpty) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                final optionLetters = ['a', 'b', 'c', 'd'];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      quizzController.currentQuestion.value,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                    SizedBox(height: 20),
-                    ...List.generate(quizzController.currentOptions.length,
-                        (index) {
-                      final letter = optionLetters[index];
-                      final option = quizzController.currentOptions[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            quizzController.checkAnswer(
-                                letter, widget.player1Name, widget.player2Name);
-                            Navigator.of(context).pop();
-                            
-                            if(quizzController.player1Stars.value == 5 || quizzController.player2Stars.value == 5){
-                              if(quizzController.player1Stars.value == 5){
-                                quizzController.showGanadorDialog("EL GANADOR ES ${widget.player1Name}");
-                              }else{
-                               quizzController.showGanadorDialog("EL GANADOR ES ${widget.player2Name}");
-                              }
-                            } else if(quizzController.currentRound.value == 10){
-                                quizzController.showGanadorDialog("NINGUNO GANO ES UN EMPATE");
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            minimumSize: Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            '$letter. $option',
-                            style: TextStyle(fontSize: 16),
+ void _showQuestionDialog() {
+  setState(() {
+    _isAnswerSelected = false; // Reinicia el estado de selección de respuesta
+  });
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          backgroundColor: Colors.grey[200],
+          title: Text("Pregunta", style: TextStyle(color: Colors.black)),
+          content: Obx(() {
+            if (quizzController.currentQuestion.value.isEmpty ||
+                quizzController.currentOptions.isEmpty) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              final optionLetters = ['a', 'b', 'c', 'd'];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    quizzController.currentQuestion.value,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  SizedBox(height: 20),
+                  ...List.generate(quizzController.currentOptions.length, (index) {
+                    final letter = optionLetters[index];
+                    final option = quizzController.currentOptions[index];
+                    bool isCorrect = (letter == quizzController.correctAnswer.value);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!_isAnswerSelected) {
+                            quizzController.checkAnswer(letter, widget.player1Name, widget.player2Name);
+                            setState(() {
+                              _isAnswerSelected = true; // Marca que se ha seleccionado una respuesta
+                            });
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: quizzController.selectedAnswer.value == letter
+                              ? (isCorrect ? Colors.green : Colors.red)
+                              : Colors.white,
+                          foregroundColor: Colors.black,
+                          minimumSize: Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                      );
-                    }),
-                  ],
-                );
-              }
-            }),
-          ),
-        );
-      },
-    );
-  }
+                        child: Text(
+                          '$letter. $option',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              );
+            }
+          }),
+          actions: [
+            Obx((){
+              return TextButton(
+              child: Text("Continuar", style: TextStyle(color: Colors.black)),
+              onPressed: quizzController.selectedAnswer.value.isNotEmpty
+                  ? () {
+                      Navigator.of(context).pop();
+                      quizzController.selectedAnswer.value = ""; // Cierra el diálogo solo si se ha seleccionado una respuesta
+                    }
+                  : null, // Deshabilitado si no se ha seleccionado una respuesta
+            );
+            })
+            
+          ],
+        ),
+      );
+    },
+  );
+}
 
-  Widget _buildStars(int filledStars) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(5, (index) {
-        return Icon(
-          index < filledStars ? Icons.star : Icons.star_border,
-          color: index < filledStars ? Colors.yellow : Colors.grey,
-        );
-      }),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300], // Fondo neutro
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        backgroundColor: Colors.grey[700], // Fondo AppBar
-        title: Text(
-          'Rueda de Temas',
-          style: TextStyle(color: Colors.white),
-        ),
+        backgroundColor: Colors.grey[700],
+        title: Text('Rueda de Temas', style: TextStyle(color: Colors.white)),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Sección de jugadores
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildPlayerInfo(widget.player1Icon, widget.player1Name,
-                  quizzController.player1Stars),
-              Text(
-                'VS',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-              _buildPlayerInfo(widget.player2Icon, widget.player2Name,
-                  quizzController.player2Stars),
+              _buildPlayerInfo(widget.player1Icon, widget.player1Name, quizzController.player1Stars),
+              Text('VS', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
+              _buildPlayerInfo(widget.player2Icon, widget.player2Name, quizzController.player2Stars),
             ],
           ),
           SizedBox(height: 20),
-          // Sección de la rueda
           Expanded(
             child: Stack(
               alignment: Alignment.center,
@@ -239,7 +222,7 @@ class _WheelPageState extends State<WheelPage> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: Obx(() {
-                    return Text("Turno del jugador ${quizzController.currentPlayer.value}");
+                    return Text("Turno del jugador ${quizzController.currentPlayer.value}", style: TextStyle(fontSize: 20));
                   }),
                 ),
                 FortuneWheel(
@@ -248,8 +231,7 @@ class _WheelPageState extends State<WheelPage> {
                     for (var topic in widget.topics)
                       FortuneItem(
                         child: topic == "Elige un tema"
-                            ? FaIcon(FontAwesomeIcons.user,
-                                size: 24, color: Colors.black)
+                            ? FaIcon(FontAwesomeIcons.user, size: 24, color: Colors.black)
                             : Text(
                                 topic,
                                 style: TextStyle(
@@ -276,20 +258,17 @@ class _WheelPageState extends State<WheelPage> {
             child: ElevatedButton(
               onPressed: () {
                 _selectNewIndex();
-                selected.add(selectedIndex); // Actualiza el índice en el stream
+                selected.add(selectedIndex);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[700], // Color del botón
+                backgroundColor: Colors.grey[700],
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.all(15), // Ajusta el padding para el icono
+                padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text(
-                'Girar',
-                style: TextStyle(fontSize: 20),
-              ),
+              child: Text('Girar', style: TextStyle(fontSize: 20)),
             ),
           ),
         ],
@@ -297,18 +276,14 @@ class _WheelPageState extends State<WheelPage> {
     );
   }
 
-  Widget _buildPlayerInfo(IconData icon, String playerName, RxInt playerStars) {
+  Widget _buildPlayerInfo(String avatar, String playerName, RxInt playerStars) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(
           radius: 30,
           backgroundColor: Colors.grey[800],
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 30,
-          ),
+          child: Image.network(avatar),
         ),
         SizedBox(height: 10),
         Text(
@@ -322,6 +297,18 @@ class _WheelPageState extends State<WheelPage> {
         SizedBox(height: 5),
         Obx(() => _buildStars(playerStars.value)),
       ],
+    );
+  }
+
+  Widget _buildStars(int filledStars) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (index) {
+        return Icon(
+          index < filledStars ? Icons.star : Icons.star_border,
+          color: index < filledStars ? Colors.yellow : Colors.grey,
+        );
+      }),
     );
   }
 }

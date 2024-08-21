@@ -100,13 +100,15 @@ class ProgramacionPage extends StatelessWidget {
                       size: 24,
                     ),
                     SizedBox(width: 8),
-                    Text(
-                      'Tiempo restante: ${controller.timeLeft.value} segundos',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
+                    Flexible(
+                      child: Text(
+                        'Tiempo restante: ${controller.timeLeft.value} segundos',
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

@@ -34,12 +34,21 @@ class Auth {
       } else {
         print("No se pudo iniciar sesión.");
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No se encontró un usuario con ese email.');
-      } else if (e.code == 'wrong-password') {
-        print('Contraseña incorrecta.');
-      }
+    } catch(e){
+      Get.dialog(
+        AlertDialog(
+          title: Column(
+            children: [
+              Text("Error"),
+              SizedBox(height: 10,),
+              Icon(Icons.error_outline_outlined, color: Colors.red, size: 30,)
+            ],
+          ),
+          actions: [
+            Text("Usuario o contraseña incorrecto")
+          ],
+        )
+      );
     }
   }
 
