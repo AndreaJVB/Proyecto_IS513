@@ -32,7 +32,7 @@ class MixtoPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     Text(
-                      'Pregunta ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
+                      'Mixtas ${controller.currentQuestionIndex.value + 1}/${controller.questions.length}',
                       style: TextStyle(color: Colors.black),
                     ),
                   ],
