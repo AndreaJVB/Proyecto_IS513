@@ -12,7 +12,7 @@ class QuizzControllerMultijugador extends GetxController {
   var player2Stars = 0.obs;
   var currentPlayer = 1.obs;
   var currentRound = 1.obs;
-  final int totalRounds = 10;
+  final int totalRounds = 20;
   var gameEnded = false.obs;
 
   final Map<String, String> urls = {
@@ -138,7 +138,8 @@ class QuizzControllerMultijugador extends GetxController {
             OutlinedButton(
               onPressed: () {
                 Navigator.of(context)
-                    .pop(); // Cierra el diálogo y regresa al inicio
+                    .pop();
+                    Get.back(); // Cierra el diálogo y regresa al inicio
               },
               child: Text("VOLVER AL INICIO"),
             ),

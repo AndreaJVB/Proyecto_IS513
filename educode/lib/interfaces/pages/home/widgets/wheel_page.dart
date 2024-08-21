@@ -29,7 +29,7 @@ class _WheelPageState extends State<WheelPage> {
     "POO",
     "Algoritmo",
     "Flutter",
-    "Elige un tema" // Nuevo ítem para la selección de temas
+    "Elige un tema"
   ];
 
   final StreamController<int> selected = StreamController<int>();
@@ -57,10 +57,13 @@ class _WheelPageState extends State<WheelPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return WillPopScope(
-          // ignore: deprecated_member_use
           onWillPop: () async => false, // Bloquea la acción de retroceso
           child: AlertDialog(
-            title: Text("Selecciona un tema"),
+            backgroundColor: Colors.grey[200], // Color neutro
+            title: Text(
+              "Selecciona un tema",
+              style: TextStyle(color: Colors.black),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: topics.sublist(0, topics.length - 1).map((topic) {
@@ -70,10 +73,12 @@ class _WheelPageState extends State<WheelPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       _loadSelectedTopic(topic);
+                        
+
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
+                      backgroundColor: Color.fromARGB(255, 61, 121, 250),
+                      foregroundColor: Colors.black,
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -89,7 +94,7 @@ class _WheelPageState extends State<WheelPage> {
             ),
             actions: [
               TextButton(
-                child: Text("Cancelar"),
+                child: Text("Cancelar", style: TextStyle(color: Colors.black)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -117,10 +122,10 @@ class _WheelPageState extends State<WheelPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return WillPopScope(
-          // ignore: deprecated_member_use
           onWillPop: () async => false, // Bloquea la acción de retroceso
           child: AlertDialog(
-            title: Text("Pregunta"),
+            backgroundColor: Colors.grey[200], // Color neutro
+            title: Text("Pregunta", style: TextStyle(color: Colors.black)),
             content: Obx(() {
               if (quizzController.currentQuestion.value.isEmpty ||
                   quizzController.currentOptions.isEmpty) {
@@ -133,8 +138,10 @@ class _WheelPageState extends State<WheelPage> {
                   children: [
                     Text(
                       quizzController.currentQuestion.value,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     SizedBox(height: 20),
                     ...List.generate(quizzController.currentOptions.length,
@@ -148,6 +155,18 @@ class _WheelPageState extends State<WheelPage> {
                             quizzController.checkAnswer(
                                 letter, widget.player1Name, widget.player2Name);
                             Navigator.of(context).pop();
+                     
+                      //BACO NOOOO BORRAR
+                      if(quizzController.player1Stars.value == 5 || quizzController.player2Stars.value == 5){
+                          if(quizzController.player1Stars.value == 5){
+                              quizzController.showGanadorDialog("EL GANADOR ES ${widget.player1Name}");
+                          }else{
+                           quizzController.showGanadorDialog("EL GANADOR ES ${widget.player2Name}");
+                          }
+                      } else if(quizzController.currentRound.value == 10){
+                          quizzController.showGanadorDialog("NINGUNO GANO ES UN EMPATE");
+                      }
+                      //*************************** */
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -189,68 +208,100 @@ class _WheelPageState extends State<WheelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300], // Fondo neutro
       appBar: AppBar(
-        title: Text('Rueda de Temas'),
+        backgroundColor: Colors.grey[700], // Fondo AppBar
+        title: Text(
+          'Rueda de Temas',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Sección de jugadores
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Sección de jugadores
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildPlayerInfo(widget.player1Icon, widget.player1Name,
+                  quizzController.player1Stars),
+              Text(
+                'VS',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              _buildPlayerInfo(widget.player2Icon, widget.player2Name,
+                  quizzController.player2Stars),
+            ],
+          ),
+          SizedBox(height: 20),
+          // Sección de la rueda
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                _buildPlayerInfo(widget.player1Icon, widget.player1Name,
-                    quizzController.player1Stars),
-                Text('VS',
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                _buildPlayerInfo(widget.player2Icon, widget.player2Name,
-                    quizzController.player2Stars),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Obx((){
+                  return Text("Turno del jugador ${quizzController.currentPlayer.value}");
+                  }),
+                ),
+                FortuneWheel(
+                  selected: selected.stream,
+                  items: [
+                    for (var topic in topics)
+                      FortuneItem(
+                        child: topic == "Elige un tema"
+                            ? FaIcon(FontAwesomeIcons.user,
+                                size: 24, color: Colors.black)
+                            : Text(
+                                topic,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                      ),
+                  ],
+                  onAnimationEnd: () {
+                    final selectedTopic = topics[selectedIndex];
+                    if (selectedTopic == "Elige un tema") {
+                      _showTopicSelectionDialog();
+                    } else {
+                      _loadSelectedTopic(selectedTopic);
+                    }
+                  },
+                ),
               ],
             ),
-            SizedBox(height: 20),
-            // Sección de la rueda
-            Expanded(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  FortuneWheel(
-                    selected: selected.stream,
-                    items: [
-                      for (var topic in topics)
-                        FortuneItem(
-                          child: topic == "Elige un tema"
-                              ? FaIcon(FontAwesomeIcons.user, size: 24)
-                              : Text(
-                                  topic,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                        ),
-                    ],
-                    onAnimationEnd: () {
-                      final selectedTopic = topics[selectedIndex];
-                      if (selectedTopic == "Elige un tema") {
-                        _showTopicSelectionDialog();
-                      } else {
-                        _loadSelectedTopic(selectedTopic);
-                      }
-                    },
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _selectNewIndex();
-                      selected.add(selectedIndex);
-                    },
-                    child: Text('Girar'),
-                  ),
-                ],
+          ),
+          // Botón de Girar en la parte inferior
+          // Botón de Girar en la parte inferior
+        Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: ElevatedButton(
+            onPressed: () {
+              _selectNewIndex();
+              selected.add(selectedIndex);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey[700], // Color del botón
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.all(15), // Ajusta el padding para el icono
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
-          ],
+            child:Icon(
+              Icons.rotate_left_outlined, // Elige el ícono que más te guste
+              size: 35, // Ajusta el tamaño del ícono
+            ),
+          ),
         ),
+
+        ],
       ),
     );
   }
@@ -258,8 +309,11 @@ class _WheelPageState extends State<WheelPage> {
   Widget _buildPlayerInfo(IconData icon, String name, RxInt stars) {
     return Column(
       children: [
-        Icon(icon, size: 40),
-        Text(name),
+        Icon(icon, size: 40, color: Colors.black),
+        Text(
+          name,
+          style: TextStyle(color: Colors.black),
+        ),
         Obx(() => _buildStars(stars.value)),
       ],
     );
